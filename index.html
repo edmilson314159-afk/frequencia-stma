@@ -95,6 +95,16 @@ td.f{color:#c3cad8}
 .ao-vivo-tela .instrucao{opacity:.8;font-size:15px;margin-top:10px;text-align:center;color:#1b1f2a}
 .oculto{display:none!important}
 .btn.mini{padding:8px 12px;font-size:13px}
+.btn.vermelho{background:var(--err);color:#fff}
+.btn.vermelho:hover{background:#8f1d17}
+.modal-fundo{position:fixed;inset:0;background:rgba(13,39,99,.55);display:grid;place-items:center;padding:16px;z-index:50}
+.modal{background:#fff;border-radius:16px;padding:24px;max-width:420px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.25);text-align:center}
+.modal h2{color:var(--ink);font-size:19px;margin:0 0 10px}
+.modal p{color:var(--muted);font-size:15px}
+.modal-icone{width:52px;height:52px;border-radius:50%;background:var(--err-bg);color:var(--err);display:grid;place-items:center;font-size:28px;font-weight:800;margin:0 auto 14px}
+.modal-detalhe{background:#f3f5fa;border-radius:10px;padding:10px 12px;font-weight:600;color:var(--brand);margin:0 0 18px}
+.modal-botoes{display:flex;gap:10px}
+.modal-botoes .btn{flex:1}
 .btn.copiado{background:var(--ok)!important;color:#fff!important;border-color:var(--ok)!important}
 .acoes-aluno{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .card .card{margin:12px 0 0}
@@ -392,9 +402,50 @@ async function abaAulas() {
     el("div", { class: "card" }, el("h2", {}, "Aulas recentes"),
       (aulas || []).length ? el("ul", { class: "lista" }, aulas.map(a => el("li", {},
         el("div", {}, el("div", {}, a.disciplina + (a.titulo ? " · " + a.titulo : "")), el("div", { class: "small muted" }, fmtData(a.data))),
-        a.encerrada_em ? el("span", { class: "pill" }, "Encerrada") : el("span", { class: "pill ao-vivo" }, "Em andamento"))))
+        el("div", { class: "acoes-aluno" },
+          a.encerrada_em ? el("span", { class: "pill" }, "Encerrada") : el("span", { class: "pill ao-vivo" }, "Em andamento"),
+          el("button", { class: "btn perigo mini", type: "button", onclick: () => apagarAula(a) }, "Apagar")))))
       : el("p", { class: "muted" }, "Nenhuma aula registrada ainda."))
   ].filter(Boolean);
+}
+
+/* ===== Apagar aula (com confirmação) ===== */
+function confirmar({ titulo, texto, detalhe, botaoOk = "Confirmar", perigo = false }) {
+  return new Promise((resolve) => {
+    const fechar = (r) => { document.removeEventListener("keydown", tecla); fundo.remove(); resolve(r); };
+    const tecla = (e) => { if (e.key === "Escape") fechar(false); };
+    const ok = el("button", { class: "btn " + (perigo ? "vermelho" : ""), type: "button", onclick: () => fechar(true) }, botaoOk);
+    const cancelar = el("button", { class: "btn sec", type: "button", onclick: () => fechar(false) }, "Cancelar");
+    const fundo = el("div", { class: "modal-fundo", onclick: (e) => { if (e.target === fundo) fechar(false); } },
+      el("div", { class: "modal", role: "alertdialog", "aria-modal": "true" },
+        perigo ? el("div", { class: "modal-icone" }, "!") : null,
+        el("h2", {}, titulo),
+        el("p", {}, texto),
+        detalhe ? el("div", { class: "modal-detalhe" }, detalhe) : null,
+        el("div", { class: "modal-botoes" }, cancelar, ok)));
+    document.addEventListener("keydown", tecla);
+    document.body.append(fundo);
+    cancelar.focus();
+  });
+}
+
+async function apagarAula(a) {
+  const nome = a.disciplina + (a.titulo ? " · " + a.titulo : "");
+  const { count } = await sb.from("freq_presencas").select("id", { count: "exact", head: true }).eq("aula_id", a.id);
+  const n = count || 0;
+  const sim = await confirmar({
+    titulo: "Tem certeza que deseja apagar esta aula?",
+    texto: n
+      ? `A lista de frequência desta aula será apagada junto, com ${n} presença${n > 1 ? "s" : ""} registrada${n > 1 ? "s" : ""}. Essas presenças deixam de contar no relatório e no histórico dos alunos. Isso não pode ser desfeito.`
+      : "Esta aula não tem nenhuma presença registrada. Isso não pode ser desfeito.",
+    detalhe: `${nome} — ${fmtData(a.data)}`,
+    botaoOk: "Sim, apagar aula",
+    perigo: true
+  });
+  if (!sim) return;
+  const { error } = await sb.rpc("freq_apagar_aula", { p_aula: a.id });
+  if (error) { await confirmar({ titulo: "Não foi possível apagar", texto: error.message, botaoOk: "Ok" }); return; }
+  telaProfessor("aulas");
 }
 
 async function abaRelatorio() {
@@ -535,7 +586,6 @@ async function copiar(texto, botao) {
 }
 function cartaoPix(p) {
   if (!p || !p.chave) return el("div", { class: "card" }, el("h1", {}, "Pix do seminário"), el("p", { class: "muted" }, "Os dados do Pix ainda não foram cadastrados."));
-  const copiaCola = pixCopiaECola(p);
   return el("div", { class: "card pix-card" },
     el("div", { class: "pix-topo" }, el("span", { class: "pix-selo" }, "Pix do STMA"), el("img", { src: LOGO, alt: "STMA", class: "pix-logo" })),
     el("div", { class: "pix-rotulo" }, "Titular"),
@@ -545,8 +595,7 @@ function cartaoPix(p) {
       el("div", { class: "pix-rotulo" }, "Chave Pix · " + (p.tipo || "")),
       el("div", { class: "pix-num" }, chaveExibir(p))),
     el("button", { class: "btn full", type: "button", onclick: (e) => copiar(chaveCopiar(p), e.currentTarget) }, "Copiar chave Pix"),
-    copiaCola ? el("button", { class: "btn sec full", type: "button", style: "margin-top:10px", onclick: (e) => copiar(copiaCola, e.currentTarget) }, "Copiar Pix copia e cola") : null,
-    el("p", { class: "small muted", style: "margin:14px 0 0" }, "No app do seu banco, escolha Pix e cole a chave (ou o código copia e cola). Depois é só digitar o valor e conferir o nome do titular antes de confirmar."),
+    el("p", { class: "small muted", style: "margin:14px 0 0" }, "No app do seu banco, escolha Pix → Pagar com chave, cole a chave e digite o valor. Confira o nome do titular antes de confirmar."),
     p.observacao ? aviso("warn", p.observacao) : null);
 }
 async function abaPixLeitura() {
