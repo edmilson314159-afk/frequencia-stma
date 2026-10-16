@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Frequência · Seminário Teológico Maranata</title>
+<meta name="theme-color" content="#14213d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<style>
+:root{
+  --bg:#f5f3ee; --card:#ffffff; --ink:#1b1f2a; --muted:#5d6475; --line:#e3dfd6;
+  --brand:#14213d; --brand-ink:#ffffff; --gold:#c8962e; --ok:#1f7a4d; --ok-bg:#e5f4ec;
+  --err:#b3261e; --err-bg:#fbe9e7; --warn-bg:#fff4dc;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+button,input,select{font:inherit}
+.topo{background:var(--brand);color:var(--brand-ink);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.topo .marca{display:flex;flex-direction:column;line-height:1.15}
+.topo .marca b{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:18px}
+.topo .marca span{font-size:12px;opacity:.75;letter-spacing:.04em;text-transform:uppercase}
+.topo button{background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:999px;padding:6px 14px;font-size:14px;cursor:pointer}
+main{max-width:760px;margin:0 auto;padding:20px 16px 48px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:16px}
+h1{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:26px;margin:0 0 6px}
+h2{font-size:18px;margin:0 0 12px}
+p{margin:0 0 12px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+label{display:block;font-size:14px;font-weight:500;margin:12px 0 6px}
+input,select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px;border-color:transparent}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:10px;padding:12px 18px;font-weight:600;cursor:pointer;background:var(--brand);color:#fff}
+.btn.full{width:100%;margin-top:16px}
+.btn.sec{background:#fff;color:var(--brand);border:1px solid var(--line)}
+.btn.perigo{background:#fff;color:var(--err);border:1px solid #efc7c2}
+.btn:disabled{opacity:.55;cursor:default}
+.link{background:none;border:0;color:var(--brand);text-decoration:underline;cursor:pointer;padding:0}
+.abas{display:flex;gap:6px;margin-bottom:16px;background:#ebe7de;padding:4px;border-radius:12px}
+.abas button{flex:1;border:0;background:transparent;padding:10px;border-radius:9px;font-weight:600;color:var(--muted);cursor:pointer}
+.abas button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.aviso{border-radius:10px;padding:12px 14px;margin:12px 0;font-size:15px}
+.aviso.ok{background:var(--ok-bg);color:var(--ok)}
+.aviso.err{background:var(--err-bg);color:var(--err)}
+.aviso.warn{background:var(--warn-bg);color:#7a5600}
+.resultado{text-align:center;padding:36px 20px}
+.resultado .icone{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;font-size:40px;font-weight:700}
+.resultado.ok .icone{background:var(--ok-bg);color:var(--ok)}
+.resultado.err .icone{background:var(--err-bg);color:var(--err)}
+.lista{list-style:none;margin:0;padding:0}
+.lista li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.lista li:last-child{border-bottom:0}
+.pill{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:#ebe7de;color:var(--muted);white-space:nowrap}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}
+.pill.ao-vivo{background:#fde8e6;color:var(--err)}
+.grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{background:#faf8f4;border:1px solid var(--line);border-radius:12px;padding:14px}
+.stat b{display:block;font-size:26px;font-family:Fraunces,Georgia,serif}
+.barra{height:8px;background:#ebe7de;border-radius:99px;overflow:hidden;margin-top:6px}
+.barra i{display:block;height:100%;background:var(--gold)}
+.tabela-wrap{overflow-x:auto;margin:0 -20px;padding:0 20px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:#fff}
+th{font-weight:600;color:var(--muted);font-size:12px}
+td.p{color:var(--ok);font-weight:700}
+td.f{color:#c9c3b6}
+/* Tela da aula ao vivo */
+.ao-vivo-tela{position:fixed;inset:0;background:var(--brand);color:#fff;display:flex;flex-direction:column;z-index:10;overflow:auto}
+.ao-vivo-tela header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:16px 20px}
+.ao-vivo-tela header h1{color:#fff;font-size:24px;margin:0}
+.ao-vivo-tela .corpo{flex:1;display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:center;padding:8px 20px 24px}
+.qr-box{background:#fff;border-radius:20px;padding:18px;width:min(78vmin,460px)}
+.qr-box #qr{width:100%;aspect-ratio:1;display:grid;place-items:center}
+.qr-box #qr img,.qr-box #qr svg{width:100%;height:auto;display:block}
+.contagem{height:6px;background:#e9e4d8;border-radius:99px;overflow:hidden;margin-top:12px}
+.contagem i{display:block;height:100%;background:var(--gold);transition:width .25s linear}
+.painel{min-width:240px;max-width:360px;flex:1}
+.painel .numero{font-family:Fraunces,Georgia,serif;font-size:64px;line-height:1}
+.painel ul{list-style:none;padding:0;margin:12px 0 0;max-height:40vh;overflow:auto}
+.painel li{padding:6px 0;border-bottom:1px solid rgba(255,255,255,.12);font-size:15px}
+.ao-vivo-tela .btn.sec{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.3)}
+.ao-vivo-tela .instrucao{opacity:.8;font-size:15px;margin-top:10px;text-align:center;color:#1b1f2a}
+.oculto{display:none!important}
+.carregando{text-align:center;padding:60px 0;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="topo">
+  <div class="marca"><span>Seminário Teológico Maranata</span><b>Frequência</b></div>
+  <button id="btnSair" class="oculto" type="button">Sair</button>
+</div>
+<main id="app"><div class="carregando">Carregando…</div></main>
+
+<script>
+/* ===== Configuração ===== */
+const SUPABASE_URL = "https://juayaeiyvmwteqgssfhx.supabase.co";
+const SUPABASE_KEY = "sb_publishable_j4wJGZdJKAeNchELx-6peQ_smN2bgjP";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/* ===== Utilidades ===== */
+const $app = document.getElementById("app");
+const btnSair = document.getElementById("btnSair");
+function el(tag, attrs = {}, ...filhos) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") n.className = v;
+    else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+    else if (v !== false && v != null) n.setAttribute(k, v === true ? "" : v);
+  }
+  for (const f of filhos.flat()) if (f != null && f !== false) n.append(f instanceof Node ? f : document.createTextNode(String(f)));
+  return n;
+}
+function tela(...filhos) { $app.replaceChildren(...filhos); window.scrollTo(0, 0); }
+function aviso(tipo, texto) { return el("div", { class: "aviso " + tipo }, texto); }
+function fmtData(d) { const [a, m, dia] = d.split("-"); return `${dia}/${m}/${a}`; }
+function fmtHora(t) { return new Date(t).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }); }
+function pegarStorage(k) { try { return localStorage.getItem(k); } catch { return null; } }
+function guardarStorage(k, v) { try { localStorage.setItem(k, v); } catch {} }
+function sessaoGet(k) { try { return sessionStorage.getItem(k); } catch { return null; } }
+function sessaoSet(k, v) { try { v == null ? sessionStorage.removeItem(k) : sessionStorage.setItem(k, v); } catch {} }
+
+// Identificador deste celular (fica salvo no navegador)
+function aparelhoId() {
+  let id = pegarStorage("freq_aparelho");
+  if (!id) {
+    id = (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2)) + "-" + Math.random().toString(36).slice(2, 8);
+    guardarStorage("freq_aparelho", id);
+  }
+  return id;
+}
+
+/* ===== Estado ===== */
+let perfil = null;
+let pararAoVivo = null;
+
+/* ===== Check-in vindo do QR ===== */
+(function capturarQR() {
+  const q = new URLSearchParams(location.search);
+  if (q.get("aula") && q.get("t")) {
+    sessaoSet("freq_checkin", JSON.stringify({ aula: q.get("aula"), t: q.get("t"), em: Date.now() }));
+    history.replaceState(null, "", location.pathname);
+  }
+})();
+
+/* ===== Inicialização ===== */
+let recuperandoSenha = false;
+sb.auth.onAuthStateChange((evento) => {
+  if (evento === "PASSWORD_RECOVERY") { recuperandoSenha = true; telaNovaSenha(); }
+});
+
+async function iniciar() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (recuperandoSenha) return;
+  if (!session) { btnSair.classList.add("oculto"); return telaEntrar(); }
+  btnSair.classList.remove("oculto");
+  const { data, error } = await sb.from("freq_perfis").select("id,nome,papel").eq("id", session.user.id).maybeSingle();
+  if (error || !data) { tela(el("div", { class: "card" }, aviso("err", "Não foi possível carregar seu perfil. Tente novamente em instantes."))); return; }
+  perfil = data;
+  if (!perfil.nome && session.user.user_metadata?.nome) {
+    await sb.rpc("freq_atualizar_nome", { p_nome: session.user.user_metadata.nome });
+    perfil.nome = session.user.user_metadata.nome;
+  }
+  const pendente = sessaoGet("freq_checkin");
+  if (pendente) { sessaoSet("freq_checkin", null); return confirmarPresenca(JSON.parse(pendente)); }
+  perfil.papel === "professor" ? telaProfessor() : telaAluno();
+}
+
+btnSair.addEventListener("click", async () => {
+  if (pararAoVivo) pararAoVivo();
+  await sb.auth.signOut();
+  perfil = null;
+  iniciar();
+});
+
+/* ===== Entrar / Criar conta ===== */
+function telaEntrar(modo = "entrar", msg = null) {
+  const temCheckin = !!sessaoGet("freq_checkin");
+  const abas = el("div", { class: "abas" },
+    el("button", { type: "button", class: modo === "entrar" ? "on" : "", onclick: () => telaEntrar("entrar") }, "Entrar"),
+    el("button", { type: "button", class: modo === "criar" ? "on" : "", onclick: () => telaEntrar("criar") }, "Criar conta"));
+  const nome = el("input", { type: "text", autocomplete: "name", required: true, placeholder: "Seu nome completo" });
+  const email = el("input", { type: "email", autocomplete: "email", required: true, placeholder: "seuemail@exemplo.com" });
+  const senha = el("input", { type: "password", autocomplete: modo === "criar" ? "new-password" : "current-password", required: true, minlength: "6", placeholder: "Mínimo de 6 caracteres" });
+  const caixaMsg = el("div");
+  if (msg) caixaMsg.append(msg);
+  const botao = el("button", { class: "btn full", type: "submit" }, modo === "criar" ? "Criar minha conta" : "Entrar");
+  const form = el("form", { onsubmit: async (e) => {
+    e.preventDefault();
+    botao.disabled = true; caixaMsg.replaceChildren();
+    try {
+      if (modo === "criar") {
+        if (nome.value.trim().length < 3) throw new Error("Digite seu nome completo.");
+        const { data, error } = await sb.auth.signUp({ email: email.value.trim(), password: senha.value,
+          options: { data: { nome: nome.value.trim() }, emailRedirectTo: location.origin + location.pathname } });
+        if (error) throw error;
+        if (!data.session) { telaEntrar("entrar", aviso("ok", "Conta criada! Abra o e-mail que enviamos e clique no link de confirmação. Depois é só entrar aqui.")); return; }
+      } else {
+        const { error } = await sb.auth.signInWithPassword({ email: email.value.trim(), password: senha.value });
+        if (error) throw error;
+      }
+      iniciar();
+    } catch (err) {
+      caixaMsg.replaceChildren(aviso("err", traduzirErro(err)));
+      botao.disabled = false;
+    }
+  } },
+    modo === "criar" ? [el("label", {}, "Nome completo"), nome] : null,
+    el("label", {}, "E-mail"), email,
+    el("label", {}, "Senha"), senha,
+    caixaMsg, botao,
+    modo === "entrar" ? el("p", { class: "small", style: "margin-top:14px;text-align:center" },
+      el("button", { type: "button", class: "link", onclick: () => esqueciSenha(email.value) }, "Esqueci minha senha")) : null);
+  tela(
+    temCheckin ? aviso("warn", "Para confirmar sua presença, entre na sua conta. Depois escaneie de novo o QR code da tela, porque ele muda a cada 20 segundos.") : null,
+    el("div", { class: "card" },
+      el("h1", {}, modo === "criar" ? "Crie sua conta" : "Bem-vindo"),
+      el("p", { class: "muted" }, modo === "criar" ? "Use o seu próprio celular: a conta fica vinculada a ele na primeira presença." : "Entre para confirmar presença e ver sua frequência."),
+      abas, form));
+}
+
+async function esqueciSenha(emailDigitado) {
+  const email = (emailDigitado || "").trim() || prompt("Digite o e-mail da sua conta:");
+  if (!email) return;
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
+  telaEntrar("entrar", error ? aviso("err", traduzirErro(error)) : aviso("ok", "Enviamos um link para redefinir sua senha. Confira seu e-mail."));
+}
+
+function telaNovaSenha() {
+  const senha = el("input", { type: "password", minlength: "6", required: true, autocomplete: "new-password" });
+  const caixa = el("div");
+  tela(el("div", { class: "card" }, el("h1", {}, "Nova senha"),
+    el("form", { onsubmit: async (e) => {
+      e.preventDefault();
+      const { error } = await sb.auth.updateUser({ password: senha.value });
+      if (error) return caixa.replaceChildren(aviso("err", traduzirErro(error)));
+      recuperandoSenha = false; iniciar();
+    } }, el("label", {}, "Digite a nova senha"), senha, caixa, el("button", { class: "btn full", type: "submit" }, "Salvar senha"))));
+}
+
+function traduzirErro(err) {
+  const m = (err && err.message) || String(err);
+  if (/Invalid login credentials/i.test(m)) return "E-mail ou senha incorretos.";
+  if (/Email not confirmed/i.test(m)) return "Confirme seu e-mail antes de entrar (veja a caixa de entrada e o spam).";
+  if (/already registered|already been registered/i.test(m)) return "Este e-mail já tem conta. Use a aba Entrar.";
+  if (/Password should be at least/i.test(m)) return "A senha precisa ter pelo menos 6 caracteres.";
+  if (/rate limit|security purposes/i.test(m)) return "Muitas tentativas seguidas. Aguarde um minuto e tente de novo.";
+  if (/valid email|invalid format/i.test(m)) return "Digite um e-mail válido.";
+  return m;
+}
+
+/* ===== Confirmação de presença ===== */
+async function confirmarPresenca({ aula, t }) {
+  tela(el("div", { class: "card resultado" }, el("p", { class: "muted" }, "Confirmando sua presença…")));
+  const { data, error } = await sb.rpc("freq_registrar_presenca", { p_aula: aula, p_token: t, p_aparelho: aparelhoId() });
+  const ok = !error && data && data.ok;
+  const texto = error ? "Não foi possível falar com o servidor. Verifique a internet e escaneie de novo." : data.mensagem;
+  tela(el("div", { class: "card resultado " + (ok ? "ok" : "err") },
+    el("div", { class: "icone" }, ok ? "✓" : "!"),
+    el("h1", {}, ok ? "Presença confirmada" : "Não foi possível confirmar"),
+    ok ? el("p", { class: "muted" }, [data.disciplina, data.titulo].filter(Boolean).join(" · ")) : null,
+    el("p", {}, ok ? `Registrada às ${fmtHora(Date.now())}. Bom estudo!` : texto),
+    el("button", { class: "btn sec", type: "button", style: "margin-top:8px", onclick: () => perfil.papel === "professor" ? telaProfessor() : telaAluno() }, "Ver minha frequência")));
+}
+
+/* ===== Área do aluno ===== */
+async function telaAluno() {
+  tela(el("div", { class: "carregando" }, "Carregando sua frequência…"));
+  const [{ data: aulas }, { data: pres }] = await Promise.all([
+    sb.from("freq_aulas").select("id,disciplina,titulo,data").order("data", { ascending: false }),
+    sb.from("freq_presencas").select("aula_id,registrada_em").eq("aluno_id", perfil.id)
+  ]);
+  const presentes = new Map((pres || []).map(p => [p.aula_id, p.registrada_em]));
+  const porDisc = {};
+  for (const a of aulas || []) {
+    const d = (porDisc[a.disciplina] ||= { total: 0, presente: 0 });
+    d.total++; if (presentes.has(a.id)) d.presente++;
+  }
+  // Mostra só disciplinas em que o aluno já teve pelo menos uma presença
+  const discsAluno = Object.entries(porDisc).filter(([, d]) => d.presente > 0);
+
+  tela(
+    el("div", { class: "card" },
+      el("h1", {}, `Olá, ${(perfil.nome || "aluno").split(" ")[0]}!`),
+      el("p", { class: "muted" }, "Para confirmar presença, abra a câmera do seu celular e aponte para o QR code que o professor mostra na sala. Abra o link que aparecer."),
+      aviso("warn", "Use sempre este mesmo celular e este mesmo navegador. Sua conta fica vinculada a ele.")),
+    el("div", { class: "card" }, el("h2", {}, "Minha frequência por disciplina"),
+      discsAluno.length ? el("div", { class: "grade" }, discsAluno.map(([nome, d]) => {
+        const pct = Math.round(100 * d.presente / d.total);
+        return el("div", { class: "stat" }, el("span", { class: "small muted" }, nome), el("b", {}, pct + "%"),
+          el("span", { class: "small muted" }, `${d.presente} de ${d.total} aulas`), el("div", { class: "barra" }, el("i", { style: `width:${pct}%` })));
+      })) : el("p", { class: "muted" }, "Você ainda não tem presenças registradas.")),
+    el("div", { class: "card" }, el("h2", {}, "Histórico de aulas"),
+      (aulas || []).filter(a => porDisc[a.disciplina] && discsAluno.some(([n]) => n === a.disciplina)).length
+        ? el("ul", { class: "lista" }, (aulas || []).filter(a => discsAluno.some(([n]) => n === a.disciplina)).map(a =>
+            el("li", {}, el("div", {}, el("div", {}, a.disciplina + (a.titulo ? " · " + a.titulo : "")), el("div", { class: "small muted" }, fmtData(a.data))),
+              presentes.has(a.id) ? el("span", { class: "pill ok" }, "Presente") : el("span", { class: "pill" }, "Falta"))))
+        : el("p", { class: "muted" }, "Nada por aqui ainda.")));
+}
+
+/* ===== Área do professor ===== */
+let abaProf = "aulas";
+async function telaProfessor(aba = abaProf) {
+  abaProf = aba;
+  const abas = el("div", { class: "abas" },
+    [["aulas", "Aulas"], ["relatorio", "Relatório"], ["alunos", "Alunos"]].map(([k, t]) =>
+      el("button", { type: "button", class: aba === k ? "on" : "", onclick: () => telaProfessor(k) }, t)));
+  const conteudo = el("div", {}, el("div", { class: "carregando" }, "Carregando…"));
+  tela(abas, conteudo);
+  if (aba === "aulas") conteudo.replaceChildren(...await abaAulas());
+  if (aba === "relatorio") conteudo.replaceChildren(...await abaRelatorio());
+  if (aba === "alunos") conteudo.replaceChildren(...await abaAlunos());
+}
+
+async function abaAulas() {
+  const { data: aulas } = await sb.from("freq_aulas").select("id,disciplina,titulo,data,encerrada_em").order("iniciada_em", { ascending: false }).limit(30);
+  const disciplinas = [...new Set((aulas || []).map(a => a.disciplina))];
+  const disc = el("input", { type: "text", list: "lista-disc", required: true, placeholder: "Ex.: Aconselhamento Bíblico", value: disciplinas[0] || "" });
+  const titulo = el("input", { type: "text", placeholder: "Ex.: Aula 3 (opcional)" });
+  const caixa = el("div");
+  const botao = el("button", { class: "btn full", type: "submit" }, "Iniciar aula e mostrar QR code");
+  const abertas = (aulas || []).filter(a => !a.encerrada_em);
+  return [
+    el("div", { class: "card" }, el("h1", {}, "Nova aula"),
+      el("form", { onsubmit: async (e) => {
+        e.preventDefault(); botao.disabled = true;
+        const { data, error } = await sb.rpc("freq_iniciar_aula", { p_disciplina: disc.value, p_titulo: titulo.value });
+        if (error) { caixa.replaceChildren(aviso("err", error.message)); botao.disabled = false; return; }
+        telaAoVivo({ id: data, disciplina: disc.value.trim(), titulo: titulo.value.trim() });
+      } },
+        el("label", {}, "Disciplina"), disc, el("datalist", { id: "lista-disc" }, disciplinas.map(d => el("option", { value: d }))),
+        el("label", {}, "Título da aula"), titulo, caixa, botao)),
+    abertas.length ? el("div", { class: "card" }, el("h2", {}, "Aulas em andamento"),
+      el("ul", { class: "lista" }, abertas.map(a => el("li", {},
+        el("div", {}, el("div", {}, a.disciplina + (a.titulo ? " · " + a.titulo : "")), el("div", { class: "small muted" }, fmtData(a.data))),
+        el("button", { class: "btn sec", type: "button", onclick: () => telaAoVivo(a) }, "Abrir QR"))))) : null,
+    el("div", { class: "card" }, el("h2", {}, "Aulas recentes"),
+      (aulas || []).length ? el("ul", { class: "lista" }, aulas.map(a => el("li", {},
+        el("div", {}, el("div", {}, a.disciplina + (a.titulo ? " · " + a.titulo : "")), el("div", { class: "small muted" }, fmtData(a.data))),
+        a.encerrada_em ? el("span", { class: "pill" }, "Encerrada") : el("span", { class: "pill ao-vivo" }, "Em andamento"))))
+      : el("p", { class: "muted" }, "Nenhuma aula registrada ainda."))
+  ].filter(Boolean);
+}
+
+async function abaRelatorio() {
+  const { data: aulas } = await sb.from("freq_aulas").select("id,disciplina,titulo,data").order("data").order("iniciada_em");
+  const disciplinas = [...new Set((aulas || []).map(a => a.disciplina))];
+  if (!disciplinas.length) return [el("div", { class: "card" }, el("p", { class: "muted" }, "Ainda não há aulas para gerar relatório."))];
+  const sel = el("select", {}, disciplinas.map(d => el("option", { value: d }, d)));
+  const area = el("div");
+  async function montar() {
+    const daDisc = aulas.filter(a => a.disciplina === sel.value);
+    const ids = daDisc.map(a => a.id);
+    const [{ data: pres }, { data: alunos }] = await Promise.all([
+      sb.from("freq_presencas").select("aula_id,aluno_id").in("aula_id", ids),
+      sb.from("freq_perfis").select("id,nome").eq("papel", "aluno").order("nome")
+    ]);
+    const set = new Set((pres || []).map(p => p.aula_id + "|" + p.aluno_id));
+    const comPresenca = new Set((pres || []).map(p => p.aluno_id));
+    const lista = (alunos || []).filter(a => comPresenca.has(a.id));
+    if (!lista.length) { area.replaceChildren(el("p", { class: "muted" }, "Nenhuma presença registrada nesta disciplina.")); return; }
+    const linhas = lista.map(al => {
+      const marcas = daDisc.map(a => set.has(a.id + "|" + al.id));
+      const n = marcas.filter(Boolean).length;
+      return { nome: al.nome || "(sem nome)", marcas, n, pct: Math.round(100 * n / daDisc.length) };
+    });
+    const tabela = el("table", {},
+      el("thead", {}, el("tr", {}, el("th", {}, "Aluno"), daDisc.map((a, i) => el("th", { title: a.titulo || "" }, `A${i + 1}`, el("br"), fmtData(a.data).slice(0, 5))), el("th", {}, "Freq."))),
+      el("tbody", {}, linhas.map(l => el("tr", {}, el("td", {}, l.nome),
+        l.marcas.map(m => el("td", { class: m ? "p" : "f" }, m ? "P" : "F")), el("td", {}, el("b", {}, l.pct + "%"))))));
+    const csv = () => {
+      const cab = ["Aluno", ...daDisc.map((a, i) => `A${i + 1} ${fmtData(a.data)}`), "Presenças", "Frequência"];
+      const corpo = linhas.map(l => [l.nome, ...l.marcas.map(m => m ? "P" : "F"), l.n, l.pct + "%"]);
+      const txt = [cab, ...corpo].map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(";")).join("\r\n");
+      const a = el("a", { href: URL.createObjectURL(new Blob(["﻿" + txt], { type: "text/csv;charset=utf-8" })), download: `frequencia-${sel.value}.csv` });
+      document.body.append(a); a.click(); a.remove();
+    };
+    area.replaceChildren(
+      el("p", { class: "small muted" }, `${daDisc.length} aula(s) · ${lista.length} aluno(s) · P = presente, F = falta`),
+      el("div", { class: "tabela-wrap" }, tabela),
+      el("button", { class: "btn sec", type: "button", style: "margin-top:16px", onclick: csv }, "Baixar planilha (CSV)"));
+  }
+  sel.addEventListener("change", montar);
+  await montar();
+  return [el("div", { class: "card" }, el("h1", {}, "Relatório de frequência"), el("label", {}, "Disciplina"), sel, el("div", { style: "margin-top:16px" }, area))];
+}
+
+async function abaAlunos() {
+  const { data: alunos } = await sb.from("freq_perfis").select("id,nome,papel,aparelho_id").order("nome");
+  const lista = (alunos || []).filter(a => a.papel === "aluno");
+  return [el("div", { class: "card" }, el("h1", {}, "Alunos"),
+    el("p", { class: "muted small" }, "Se um aluno trocar de celular ou limpar os dados do navegador, use “Liberar celular” para que ele possa vincular o novo aparelho na próxima aula."),
+    lista.length ? el("ul", { class: "lista" }, lista.map(a => el("li", {},
+      el("div", {}, el("div", {}, a.nome || "(sem nome)"), el("div", { class: "small muted" }, a.aparelho_id ? "Celular vinculado" : "Nenhum celular vinculado")),
+      a.aparelho_id ? el("button", { class: "btn perigo", type: "button", onclick: async (e) => {
+        if (!confirm(`Liberar o celular de ${a.nome || "este aluno"}? Na próxima presença ele vincula o aparelho que estiver usando.`)) return;
+        e.target.disabled = true;
+        const { error } = await sb.rpc("freq_liberar_aparelho", { p_aluno: a.id });
+        if (error) { alert(error.message); e.target.disabled = false; return; }
+        telaProfessor("alunos");
+      } }, "Liberar celular") : null)))
+    : el("p", { class: "muted" }, "Nenhum aluno cadastrado ainda."))];
+}
+
+/* ===== Aula ao vivo: QR rotativo ===== */
+function telaAoVivo(aula) {
+  if (pararAoVivo) pararAoVivo();
+  const qr = el("div", { id: "qr" });
+  const barra = el("i", { style: "width:100%" });
+  const numero = el("div", { class: "numero" }, "0");
+  const nomes = el("ul");
+  const status = el("div", { class: "small", style: "opacity:.75;margin-top:8px" });
+  let tokenAtual = null, expira = 0, ativo = true, timer, tick;
+
+  const sairTela = () => { pararAoVivo && pararAoVivo(); document.exitFullscreen?.().catch(() => {}); telaProfessor("aulas"); };
+  const raiz = el("div", { class: "ao-vivo-tela" },
+    el("header", {},
+      el("div", {}, el("div", { class: "small", style: "opacity:.7;text-transform:uppercase;letter-spacing:.06em" }, "Confirme sua presença"),
+        el("h1", {}, aula.disciplina + (aula.titulo ? " · " + aula.titulo : ""))),
+      el("div", { style: "display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end" },
+        el("button", { class: "btn sec", type: "button", onclick: () => { try { const p = document.fullscreenElement ? document.exitFullscreen() : raiz.requestFullscreen?.(); p?.catch?.(() => {}); } catch {} } }, "Tela cheia"),
+        el("button", { class: "btn sec", type: "button", onclick: sairTela }, "Voltar"),
+        el("button", { class: "btn", style: "background:#fff;color:var(--err)", type: "button", onclick: async () => {
+          if (!confirm("Encerrar a aula? Depois disso ninguém mais consegue confirmar presença.")) return;
+          await sb.rpc("freq_encerrar_aula", { p_aula: aula.id }); sairTela();
+        } }, "Encerrar aula"))),
+    el("div", { class: "corpo" },
+      el("div", { class: "qr-box" }, qr, el("div", { class: "contagem" }, barra),
+        el("div", { class: "instrucao" }, "Aponte a câmera do celular para o código")),
+      el("div", { class: "painel" }, el("div", { class: "small", style: "opacity:.7" }, "Presentes"), numero, nomes, status)));
+  document.body.append(raiz);
+
+  function desenharQR(token) {
+    const url = `${location.origin}${location.pathname}?aula=${encodeURIComponent(aula.id)}&t=${encodeURIComponent(token)}`;
+    const q = qrcode(0, "M"); q.addData(url); q.make();
+    qr.innerHTML = q.createSvgTag({ cellSize: 8, margin: 2, scalable: true });
+  }
+  async function atualizar() {
+    if (!ativo) return;
+    const { data, error } = await sb.rpc("freq_token_atual", { p_aula: aula.id });
+    if (error) {
+      if (/encerrada/i.test(error.message)) { status.textContent = "Aula encerrada."; ativo = false; return; }
+      status.textContent = "Sem conexão. Tentando de novo…";
+    } else {
+      status.textContent = "";
+      if (data.token !== tokenAtual) { tokenAtual = data.token; desenharQR(tokenAtual); }
+      expira = new Date(data.expira_em).getTime();
+    }
+    const { data: pres } = await sb.from("freq_presencas").select("aluno_id,registrada_em,freq_perfis(nome)").eq("aula_id", aula.id).order("registrada_em", { ascending: false });
+    if (pres) {
+      numero.textContent = pres.length;
+      nomes.replaceChildren(...pres.map(p => el("li", {}, (p.freq_perfis?.nome || "Aluno") + " · " + fmtHora(p.registrada_em))));
+    }
+    timer = setTimeout(atualizar, 4000);
+  }
+  tick = setInterval(() => {
+    const resta = Math.max(0, expira - Date.now());
+    barra.style.width = Math.min(100, resta / 200) + "%";
+  }, 250);
+  atualizar();
+  pararAoVivo = () => { ativo = false; clearTimeout(timer); clearInterval(tick); raiz.remove(); pararAoVivo = null; };
+}
+
+iniciar();
+</script>
+</body>
+</html>
