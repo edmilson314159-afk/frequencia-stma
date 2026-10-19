@@ -94,6 +94,91 @@ td.f{color:#c3cad8}
 .ao-vivo-tela .btn.sec{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.3)}
 .ao-vivo-tela .instrucao{opacity:.8;font-size:15px;margin-top:10px;text-align:center;color:#1b1f2a}
 .oculto{display:none!important}
+/* ===== Abas roláveis ===== */
+.abas{overflow-x:auto;scrollbar-width:none}
+.abas::-webkit-scrollbar{display:none}
+.abas button{flex:1 0 auto;white-space:nowrap;padding:10px 14px}
+/* ===== Resumo e frequência ===== */
+.resumo{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.resumo-box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.resumo-box span{font-size:12.5px;color:var(--muted)}
+.resumo-box b{font-family:Montserrat,Inter,sans-serif;font-weight:800;font-size:26px;color:var(--brand);line-height:1.15}
+.resumo-box b.menor{font-size:16px;line-height:1.3}
+.resumo-box small{font-size:12px;color:var(--muted)}
+.resumo-box.bom{border-color:#b7e0c8;background:var(--ok-bg)}
+.resumo-box.bom b{color:var(--ok)}
+.resumo-box.baixo{border-color:#efc7c2;background:var(--err-bg)}
+.resumo-box.baixo b{color:var(--err)}
+.resumo-box.destaque{border:2px solid var(--gold);background:#fff8d6}
+.card .resumo{margin:14px 0}
+@media (max-width:560px){.resumo{grid-template-columns:1fr}}
+.barra{position:relative}
+.barra u{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.55;text-decoration:none}
+.stat > span{display:block}
+.stat.bom .barra i{background:var(--ok)}
+.stat.baixo .barra i{background:var(--err)}
+.stat.baixo b{color:var(--err)}
+.selo-freq{display:inline-block;margin-top:8px;font-size:12px;font-weight:600;padding:2px 10px;border-radius:999px}
+.stat.bom .selo-freq{background:var(--ok-bg);color:var(--ok)}
+.stat.baixo .selo-freq{background:var(--err-bg);color:var(--err)}
+.pill.falta{background:var(--err-bg);color:var(--err)}
+td.pct-baixo{color:var(--err)}
+td.pct-bom{color:var(--ok)}
+/* ===== Janelas ===== */
+.modal.largo{max-width:540px;text-align:left;max-height:88vh;display:flex;flex-direction:column;padding:0}
+.janela-topo{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px 10px;border-bottom:1px solid var(--line)}
+.janela-topo h2{margin:0}
+.janela-corpo{padding:14px 20px 20px;overflow:auto}
+.janela-corpo .modal-detalhe{margin-bottom:12px;text-align:left}
+.fechar{background:none;border:0;font-size:28px;line-height:1;color:var(--muted);cursor:pointer;padding:0 4px}
+.duas-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+/* ===== Pessoas ===== */
+.filtros{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer}
+.chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.mini-select{width:auto;padding:7px 10px;font-size:13px;border-radius:8px}
+/* ===== Farol de Módulos ===== */
+.farol-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.farol-cab h1{margin-bottom:2px}
+.farol-barra{display:grid;grid-template-columns:repeat(auto-fit,minmax(6px,1fr));gap:3px;margin:4px 0 8px}
+.farol-barra i{height:12px;border-radius:2px;background:#fff;border:1px solid #b9c1d0}
+.farol-barra i.ok{background:var(--brand);border-color:var(--brand)}
+.farol-barra i.agora{background:var(--gold);border-color:var(--gold)}
+.legenda{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--muted);margin:0 0 6px}
+.legenda span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:14px;height:14px;border-radius:3px;display:inline-block;border:1.5px solid #b9c1d0}
+.sw.ok{background:var(--brand);border-color:var(--brand)}
+.sw.agora{background:#fff8d6;border:2px solid var(--gold)}
+.sw.todo{border-style:dashed}
+.farol-ano{border-top:1px solid var(--line);padding:16px 0 4px;margin-top:14px}
+.farol-ano-tit{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+.farol-ano-tit h2{font-family:Montserrat,Inter,sans-serif;font-weight:800;font-size:24px;color:var(--brand);margin:0}
+.farol-ano-tit span{font-size:13px;color:var(--muted)}
+.farol-trilha{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.farol-bim{border-radius:12px;padding:10px 11px;border:1.5px solid var(--line);background:#fff;display:flex;flex-direction:column;gap:6px}
+.farol-bim-topo{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+.farol-bim .per{font-weight:700;font-size:13.5px}
+.farol-bim .tag{font-size:11.5px;font-weight:700;padding:1px 8px;border-radius:999px}
+.farol-bim ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.farol-bim.ok{background:#eaf1fd;border-color:transparent}
+.farol-bim.ok .tag{background:var(--brand);color:#fff}
+.farol-bim.agora,.farol-bim.proximo{background:#fff8d6;border:2px solid var(--gold)}
+.farol-bim.agora .tag,.farol-bim.proximo .tag{background:var(--gold);color:#1b1b1b}
+.farol-bim.todo{border-style:dashed;border-color:#b9c1d0}
+.farol-bim.todo .per{color:var(--muted)}
+.farol-disc{all:unset;cursor:pointer;display:block;width:100%;box-sizing:border-box;border-radius:8px;padding:4px 6px;margin:0 -6px;font-size:13.5px;line-height:1.25}
+.farol-disc:hover,.farol-disc:focus-visible{background:rgba(20,56,130,.08)}
+.farol-disc small{display:block;font-size:11.5px;color:var(--muted);margin-top:1px}
+.farol-seq{margin-top:18px;border-top:1px solid var(--line);padding-top:14px}
+.farol-seq summary{cursor:pointer;font-weight:700;color:var(--brand)}
+.farol-seq ol{list-style:none;padding:0;margin:10px 0 0;columns:2 260px;column-gap:24px}
+.farol-seq li{display:grid;grid-template-columns:34px 1fr;gap:6px;padding:5px 0;border-top:1px solid var(--line);font-size:13.5px;break-inside:avoid}
+.farol-seq .num{font-weight:700;color:var(--muted)}
+.farol-seq li.ok .num{color:var(--brand)}
+.farol-seq small{display:block;font-size:11.5px;color:var(--brand)}
+.farol-seq small.agora{color:#8a6500}
+main{max-width:860px}
+
 .btn.mini{padding:8px 12px;font-size:13px}
 .btn.vermelho{background:var(--err);color:#fff}
 .btn.vermelho:hover{background:#8f1d17}
@@ -215,7 +300,7 @@ async function iniciar() {
   }
   const pendente = sessaoGet("freq_checkin");
   if (pendente) { sessaoSet("freq_checkin", null); return confirmarPresenca(JSON.parse(pendente)); }
-  perfil.papel === "professor" ? telaProfessor() : telaAluno();
+  telaInicial();
 }
 
 btnSair.addEventListener("click", async () => {
@@ -233,7 +318,6 @@ function telaEntrar(modo = "entrar", msg = null) {
     el("button", { type: "button", class: modo === "criar" ? "on" : "", onclick: () => telaEntrar("criar") }, "Criar conta"));
   const nome = el("input", { type: "text", autocomplete: "name", required: true, placeholder: "Seu nome completo" });
   const cpf = campoCpf();
-  const email = el("input", { type: "email", autocomplete: "email", required: true, placeholder: "seuemail@exemplo.com" });
   const senha = el("input", { type: "password", autocomplete: modo === "criar" ? "new-password" : "current-password", required: true, minlength: "6", placeholder: "Mínimo de 6 caracteres" });
   const senha2 = el("input", { type: "password", autocomplete: "new-password", required: true, minlength: "6", placeholder: "Repita a senha" });
   const caixaMsg = el("div");
@@ -256,9 +340,6 @@ function telaEntrar(modo = "entrar", msg = null) {
         if (!data?.ok) throw new Error(data?.mensagem || "Não foi possível criar a conta.");
         const { error: e2 } = await sb.auth.signInWithPassword({ email: emailDoCpf(c), password: senha.value });
         if (e2) throw e2;
-      } else if (modo === "email") {
-        const { error } = await sb.auth.signInWithPassword({ email: email.value.trim(), password: senha.value });
-        if (error) throw error;
       } else {
         const c = soDigitos(cpf.value);
         if (c.length !== 11) throw new Error("Digite os 11 números do CPF.");
@@ -272,16 +353,13 @@ function telaEntrar(modo = "entrar", msg = null) {
     }
   } },
     modo === "criar" ? [el("label", {}, "Nome completo"), nome] : null,
-    modo === "email" ? [el("label", {}, "E-mail"), email] : [el("label", {}, "CPF"), cpf],
+    el("label", {}, "CPF"), cpf,
     el("label", {}, "Senha"), senha,
     modo === "criar" ? [el("label", {}, "Confirme a senha"), senha2] : null,
     caixaMsg, botao,
     modo !== "criar" ? el("p", { class: "small muted", style: "margin-top:16px;text-align:center" },
       "Esqueceu a senha? Fale com o professor ou com a secretaria, que podem cadastrar uma nova para você.") : null,
-    modo === "entrar" ? el("p", { class: "small", style: "text-align:center;margin:0" },
-      el("button", { type: "button", class: "link", onclick: () => telaEntrar("email") }, "Tenho uma conta antiga com e-mail")) : null,
-    modo === "email" ? el("p", { class: "small", style: "text-align:center;margin:0" },
-      el("button", { type: "button", class: "link", onclick: () => telaEntrar("entrar") }, "Entrar com CPF")) : null);
+    null);
 
   tela(
     temCheckin ? aviso("warn", "Para confirmar sua presença, entre na sua conta. Depois escaneie de novo o QR code da tela, porque ele muda a cada 20 segundos.") : null,
@@ -294,8 +372,7 @@ function telaEntrar(modo = "entrar", msg = null) {
 
 function traduzirErro(err, modo) {
   const m = (err && err.message) || String(err);
-  if (/Invalid login credentials/i.test(m)) return modo === "email" ? "E-mail ou senha incorretos." : "CPF ou senha incorretos. Se ainda não tem conta, use a aba Criar conta.";
-  if (/Email not confirmed/i.test(m)) return "Esta conta antiga ainda não foi confirmada. Peça ajuda ao professor.";
+  if (/Invalid login credentials/i.test(m)) return "CPF ou senha incorretos. Se ainda não tem conta, use a aba Criar conta.";
   if (/rate limit|security purposes|too many/i.test(m)) return "Muitas tentativas seguidas. Aguarde um minuto e tente de novo.";
   if (/Failed to fetch|NetworkError/i.test(m)) return "Sem conexão com a internet. Tente de novo.";
   return m;
@@ -312,123 +389,257 @@ async function confirmarPresenca({ aula, t }) {
     el("h1", {}, ok ? "Presença confirmada" : "Não foi possível confirmar"),
     ok ? el("p", { class: "muted" }, [data.disciplina, data.titulo].filter(Boolean).join(" · ")) : null,
     el("p", {}, ok ? `Registrada às ${fmtHora(Date.now())}. Bom estudo!` : texto),
-    el("button", { class: "btn sec", type: "button", style: "margin-top:8px", onclick: () => perfil.papel === "professor" ? telaProfessor() : telaAluno() }, "Ver minha frequência")));
+    el("button", { class: "btn sec", type: "button", style: "margin-top:8px", onclick: () => telaInicial() }, ehProfessor() ? "Voltar" : "Ver minha frequência")));
 }
+
+/* ===== Perfis e navegação ===== */
+const FREQ_MINIMA = 75;
+const NOMES_PAPEL = { aluno: "Aluno", professor: "Professor", coordenacao: "Coordenação" };
+const ehCoord = () => perfil?.papel === "coordenacao";
+const ehProfessor = () => perfil?.papel === "professor" || ehCoord();
+function telaInicial() { ehProfessor() ? telaProfessor() : telaAluno(); }
+
+function barraAbas(itens, ativa, ir) {
+  return el("div", { class: "abas" }, itens.map(([k, t]) =>
+    el("button", { type: "button", class: ativa === k ? "on" : "", onclick: () => ir(k) }, t)));
+}
+
+/* ===== Disciplinas: utilidades ===== */
+const ROTULO_STATUS = { concluida: "Concluída", andamento: "Em andamento", prevista: "Prevista" };
+async function carregarDisciplinas() {
+  const { data } = await sb.from("freq_disciplinas").select("*").order("ano").order("bimestre").order("nome");
+  return data || [];
+}
+function quando(d) { return (d.periodo ? d.periodo : "bimestre " + d.bimestre) + " " + d.ano; }
+function rotuloDisc(d) { return `${d.nome} (${quando(d)})`; }
+function chaveAula(a) { return a.disciplina_id || "nome:" + a.disciplina; }
+function mapaDisciplinas(discs) { return new Map(discs.map(d => [d.id, d])); }
+function nomeDaChave(chave, mapa, aulas) {
+  if (mapa.has(chave)) return rotuloDisc(mapa.get(chave));
+  const a = aulas.find(x => chaveAula(x) === chave);
+  return a ? a.disciplina : "Disciplina";
+}
+function corPct(pct) { return pct >= FREQ_MINIMA ? "bom" : "baixo"; }
 
 /* ===== Área do aluno ===== */
 let abaAlunoAtual = "frequencia";
 async function telaAluno(aba = abaAlunoAtual) {
   abaAlunoAtual = aba;
-  const abas = el("div", { class: "abas" },
-    [["frequencia", "Minha frequência"], ["pix", "Pix do seminário"]].map(([k, t]) =>
-      el("button", { type: "button", class: aba === k ? "on" : "", onclick: () => telaAluno(k) }, t)));
   const conteudo = el("div", {}, el("div", { class: "carregando" }, "Carregando…"));
-  tela(abas, conteudo);
+  tela(barraAbas([["frequencia", "Minha frequência"], ["pix", "Pix do seminário"]], aba, telaAluno), conteudo);
   conteudo.replaceChildren(...(aba === "pix" ? await abaPixLeitura() : await abaFrequenciaAluno()));
 }
 
 async function abaFrequenciaAluno() {
-  const [{ data: aulas }, { data: pres }] = await Promise.all([
-    sb.from("freq_aulas").select("id,disciplina,titulo,data").order("data", { ascending: false }),
-    sb.from("freq_presencas").select("aula_id,registrada_em").eq("aluno_id", perfil.id)
+  const [{ data: aulas }, { data: pres }, discs] = await Promise.all([
+    sb.from("freq_aulas").select("id,disciplina,disciplina_id,titulo,data").order("data", { ascending: false }).order("iniciada_em", { ascending: false }),
+    sb.from("freq_presencas").select("aula_id,registrada_em,manual").eq("aluno_id", perfil.id),
+    carregarDisciplinas()
   ]);
-  const presentes = new Map((pres || []).map(p => [p.aula_id, p.registrada_em]));
-  const porDisc = {};
+  const mapa = mapaDisciplinas(discs);
+  const presentes = new Map((pres || []).map(p => [p.aula_id, p]));
+  const grupos = new Map();
   for (const a of aulas || []) {
-    const d = (porDisc[a.disciplina] ||= { total: 0, presente: 0 });
-    d.total++; if (presentes.has(a.id)) d.presente++;
+    const k = chaveAula(a);
+    if (!grupos.has(k)) grupos.set(k, { chave: k, total: 0, presente: 0, ultima: a.data });
+    const g = grupos.get(k); g.total++; if (presentes.has(a.id)) g.presente++;
   }
-  // Mostra só disciplinas em que o aluno já teve pelo menos uma presença
-  const discsAluno = Object.entries(porDisc).filter(([, d]) => d.presente > 0);
-  const aulasAluno = (aulas || []).filter(a => discsAluno.some(([n]) => n === a.disciplina));
+  // Conta só as disciplinas que o aluno cursou (pelo menos uma presença)
+  const cursadas = [...grupos.values()].filter(g => g.presente > 0);
+  const chavesCursadas = new Set(cursadas.map(g => g.chave));
+  const aulasAluno = (aulas || []).filter(a => chavesCursadas.has(chaveAula(a)));
+  const totalAulas = cursadas.reduce((s, g) => s + g.total, 0);
+  const totalPres = cursadas.reduce((s, g) => s + g.presente, 0);
+  const geral = totalAulas ? Math.round(100 * totalPres / totalAulas) : 0;
+  const abaixo = cursadas.filter(g => Math.round(100 * g.presente / g.total) < FREQ_MINIMA).length;
 
   return [
     el("div", { class: "card" },
       el("h1", {}, `Olá, ${(perfil.nome || "aluno").split(" ")[0]}!`),
       el("p", { class: "muted" }, "Para confirmar presença, abra a câmera do seu celular e aponte para o QR code que o professor mostra na sala. Abra o link que aparecer."),
       aviso("warn", "Use sempre este mesmo celular e este mesmo navegador. Sua conta fica vinculada a ele.")),
-    el("div", { class: "card" }, el("h2", {}, "Minha frequência por disciplina"),
-      discsAluno.length ? el("div", { class: "grade" }, discsAluno.map(([nome, d]) => {
-        const pct = Math.round(100 * d.presente / d.total);
-        return el("div", { class: "stat" }, el("span", { class: "small muted" }, nome), el("b", {}, pct + "%"),
-          el("span", { class: "small muted" }, `${d.presente} de ${d.total} aulas`), el("div", { class: "barra" }, el("i", { style: `width:${pct}%` })));
+    cursadas.length ? el("div", { class: "resumo" },
+      el("div", { class: "resumo-box " + corPct(geral) }, el("span", {}, "Frequência geral"), el("b", {}, geral + "%"), el("small", {}, `mínimo exigido: ${FREQ_MINIMA}%`)),
+      el("div", { class: "resumo-box" }, el("span", {}, "Aulas assistidas"), el("b", {}, totalPres), el("small", {}, `de ${totalAulas} aulas`)),
+      el("div", { class: "resumo-box" + (abaixo ? " baixo" : "") }, el("span", {}, "Disciplinas cursadas"), el("b", {}, cursadas.length),
+        el("small", {}, abaixo ? `${abaixo} abaixo do mínimo` : "todas acima do mínimo"))) : null,
+    el("div", { class: "card" }, el("h2", {}, "Frequência por disciplina"),
+      cursadas.length ? el("div", { class: "grade" }, cursadas.map(g => {
+        const pct = Math.round(100 * g.presente / g.total);
+        const d = mapa.get(g.chave);
+        return el("div", { class: "stat " + corPct(pct) },
+          el("span", { class: "small muted" }, d ? d.nome : nomeDaChave(g.chave, mapa, aulas)),
+          d ? el("span", { class: "small muted" }, quando(d)) : null,
+          el("b", {}, pct + "%"),
+          el("span", { class: "small muted" }, `${g.presente} de ${g.total} aulas`),
+          el("div", { class: "barra" }, el("i", { style: `width:${pct}%` }), el("u", { style: `left:${FREQ_MINIMA}%`, title: `Mínimo de ${FREQ_MINIMA}%` })),
+          el("span", { class: "selo-freq" }, pct >= FREQ_MINIMA ? "Acima do mínimo" : `Abaixo de ${FREQ_MINIMA}%`));
       })) : el("p", { class: "muted" }, "Você ainda não tem presenças registradas.")),
     el("div", { class: "card" }, el("h2", {}, "Histórico de aulas"),
       aulasAluno.length
-        ? el("ul", { class: "lista" }, aulasAluno.map(a =>
-            el("li", {}, el("div", {}, el("div", {}, a.disciplina + (a.titulo ? " · " + a.titulo : "")), el("div", { class: "small muted" }, fmtData(a.data))),
-              presentes.has(a.id) ? el("span", { class: "pill ok" }, "Presente") : el("span", { class: "pill" }, "Falta"))))
+        ? el("ul", { class: "lista" }, aulasAluno.map(a => {
+            const p = presentes.get(a.id);
+            return el("li", {}, el("div", {}, el("div", {}, a.disciplina + (a.titulo ? " · " + a.titulo : "")), el("div", { class: "small muted" }, fmtData(a.data))),
+              p ? el("span", { class: "pill ok" }, p.manual ? "Presente (manual)" : "Presente") : el("span", { class: "pill falta" }, "Falta"));
+          }))
         : el("p", { class: "muted" }, "Nada por aqui ainda."))
   ];
 }
 
-/* ===== Área do professor ===== */
+/* ===== Área do professor e da coordenação ===== */
 let abaProf = "aulas";
 async function telaProfessor(aba = abaProf) {
+  const itens = ehCoord()
+    ? [["aulas", "Aulas"], ["relatorio", "Relatório"], ["pessoas", "Pessoas"], ["disciplinas", "Disciplinas"], ["pix", "Pix"]]
+    : [["aulas", "Aulas"], ["relatorio", "Relatório"], ["pessoas", "Alunos"]];
+  if (!itens.some(([k]) => k === aba)) aba = "aulas";
   abaProf = aba;
-  const abas = el("div", { class: "abas" },
-    [["aulas", "Aulas"], ["relatorio", "Relatório"], ["alunos", "Alunos"], ["pix", "Pix"]].map(([k, t]) =>
-      el("button", { type: "button", class: aba === k ? "on" : "", onclick: () => telaProfessor(k) }, t)));
   const conteudo = el("div", {}, el("div", { class: "carregando" }, "Carregando…"));
-  tela(abas, conteudo);
-  if (aba === "aulas") conteudo.replaceChildren(...await abaAulas());
-  if (aba === "relatorio") conteudo.replaceChildren(...await abaRelatorio());
-  if (aba === "alunos") conteudo.replaceChildren(...await abaAlunos());
-  if (aba === "pix") conteudo.replaceChildren(...await abaPixProfessor());
+  tela(barraAbas(itens, aba, telaProfessor), conteudo);
+  const fn = { aulas: abaAulas, relatorio: abaRelatorio, pessoas: abaPessoas, disciplinas: abaDisciplinas, pix: abaPixProfessor }[aba];
+  conteudo.replaceChildren(...await fn());
+}
+
+function seletorDisciplina(discs, selecionada) {
+  const grupos = [["andamento", "Em andamento"], ["prevista", "Próximas"], ["concluida", "Concluídas"]];
+  const sel = el("select", { required: true },
+    el("option", { value: "" }, "Escolha a disciplina…"),
+    grupos.map(([st, rot]) => {
+      let lista = discs.filter(d => d.status === st);
+      if (st === "concluida") lista = lista.slice().reverse();
+      return lista.length ? el("optgroup", { label: rot }, lista.map(d =>
+        el("option", { value: d.id, selected: d.id === selecionada }, rotuloDisc(d) + (d.professor ? " · " + d.professor : "")))) : null;
+    }));
+  return sel;
 }
 
 async function abaAulas() {
-  const { data: aulas } = await sb.from("freq_aulas").select("id,disciplina,titulo,data,encerrada_em").order("iniciada_em", { ascending: false }).limit(30);
-  const disciplinas = [...new Set((aulas || []).map(a => a.disciplina))];
-  const disc = el("input", { type: "text", list: "lista-disc", required: true, placeholder: "Ex.: Aconselhamento Bíblico", value: disciplinas[0] || "" });
+  const [{ data: aulas }, discs] = await Promise.all([
+    sb.from("freq_aulas").select("id,disciplina,disciplina_id,titulo,data,encerrada_em").order("iniciada_em", { ascending: false }).limit(40),
+    carregarDisciplinas()
+  ]);
+  const padrao = (discs.find(d => d.status === "andamento") || {}).id;
+  const disc = seletorDisciplina(discs, padrao);
   const titulo = el("input", { type: "text", placeholder: "Ex.: Aula 3 (opcional)" });
   const caixa = el("div");
   const botao = el("button", { class: "btn full", type: "submit" }, "Iniciar aula e mostrar QR code");
   const abertas = (aulas || []).filter(a => !a.encerrada_em);
+  const nomeAula = (a) => a.disciplina + (a.titulo ? " · " + a.titulo : "");
   return [
     el("div", { class: "card" }, el("h1", {}, "Nova aula"),
+      discs.length ? null : aviso("warn", "Nenhuma disciplina cadastrada ainda. A coordenação cadastra as disciplinas na aba Disciplinas."),
       el("form", { onsubmit: async (e) => {
-        e.preventDefault(); botao.disabled = true;
-        const { data, error } = await sb.rpc("freq_iniciar_aula", { p_disciplina: disc.value, p_titulo: titulo.value });
+        e.preventDefault();
+        if (!disc.value) { caixa.replaceChildren(aviso("err", "Escolha a disciplina.")); return; }
+        botao.disabled = true;
+        const { data, error } = await sb.rpc("freq_iniciar_aula_disc", { p_disciplina_id: disc.value, p_titulo: titulo.value });
         if (error) { caixa.replaceChildren(aviso("err", error.message)); botao.disabled = false; return; }
-        telaAoVivo({ id: data, disciplina: disc.value.trim(), titulo: titulo.value.trim() });
+        const d = discs.find(x => x.id === disc.value);
+        telaAoVivo({ id: data, disciplina: d.nome, titulo: titulo.value.trim() });
       } },
-        el("label", {}, "Disciplina"), disc, el("datalist", { id: "lista-disc" }, disciplinas.map(d => el("option", { value: d }))),
+        el("label", {}, "Disciplina"), disc,
         el("label", {}, "Título da aula"), titulo, caixa, botao)),
     abertas.length ? el("div", { class: "card" }, el("h2", {}, "Aulas em andamento"),
       el("ul", { class: "lista" }, abertas.map(a => el("li", {},
-        el("div", {}, el("div", {}, a.disciplina + (a.titulo ? " · " + a.titulo : "")), el("div", { class: "small muted" }, fmtData(a.data))),
-        el("button", { class: "btn sec", type: "button", onclick: () => telaAoVivo(a) }, "Abrir QR"))))) : null,
-    el("div", { class: "card" }, el("h2", {}, "Aulas recentes"),
-      (aulas || []).length ? el("ul", { class: "lista" }, aulas.map(a => el("li", {},
-        el("div", {}, el("div", {}, a.disciplina + (a.titulo ? " · " + a.titulo : "")), el("div", { class: "small muted" }, fmtData(a.data))),
+        el("div", {}, el("div", {}, nomeAula(a)), el("div", { class: "small muted" }, fmtData(a.data))),
         el("div", { class: "acoes-aluno" },
-          a.encerrada_em ? el("span", { class: "pill" }, "Encerrada") : el("span", { class: "pill ao-vivo" }, "Em andamento"),
+          el("button", { class: "btn sec mini", type: "button", onclick: () => abrirPresencas(a) }, "Presenças"),
+          el("button", { class: "btn mini", type: "button", onclick: () => telaAoVivo(a) }, "Abrir QR")))))) : null,
+    el("div", { class: "card" }, el("h2", {}, "Aulas recentes"),
+      el("p", { class: "small muted" }, "Em “Presenças” você registra a presença manual de quem não conseguiu usar o QR code."),
+      (aulas || []).length ? el("ul", { class: "lista" }, aulas.map(a => el("li", {},
+        el("div", {}, el("div", {}, nomeAula(a)), el("div", { class: "small muted" }, fmtData(a.data)),
+          a.encerrada_em ? el("span", { class: "pill" }, "Encerrada") : el("span", { class: "pill ao-vivo" }, "Em andamento")),
+        el("div", { class: "acoes-aluno" },
+          el("button", { class: "btn sec mini", type: "button", onclick: () => abrirPresencas(a) }, "Presenças"),
           el("button", { class: "btn perigo mini", type: "button", onclick: () => apagarAula(a) }, "Apagar")))))
       : el("p", { class: "muted" }, "Nenhuma aula registrada ainda."))
   ].filter(Boolean);
 }
 
-/* ===== Apagar aula (com confirmação) ===== */
-function confirmar({ titulo, texto, detalhe, botaoOk = "Confirmar", perigo = false }) {
+/* ===== Janelas (modais) ===== */
+function confirmar({ titulo, texto, detalhe, botaoOk = "Confirmar", perigo = false, soOk = false }) {
   return new Promise((resolve) => {
     const fechar = (r) => { document.removeEventListener("keydown", tecla); fundo.remove(); resolve(r); };
     const tecla = (e) => { if (e.key === "Escape") fechar(false); };
     const ok = el("button", { class: "btn " + (perigo ? "vermelho" : ""), type: "button", onclick: () => fechar(true) }, botaoOk);
-    const cancelar = el("button", { class: "btn sec", type: "button", onclick: () => fechar(false) }, "Cancelar");
+    const cancelar = soOk ? null : el("button", { class: "btn sec", type: "button", onclick: () => fechar(false) }, "Cancelar");
     const fundo = el("div", { class: "modal-fundo", onclick: (e) => { if (e.target === fundo) fechar(false); } },
       el("div", { class: "modal", role: "alertdialog", "aria-modal": "true" },
         perigo ? el("div", { class: "modal-icone" }, "!") : null,
         el("h2", {}, titulo),
-        el("p", {}, texto),
+        texto ? el("p", {}, texto) : null,
         detalhe ? el("div", { class: "modal-detalhe" }, detalhe) : null,
         el("div", { class: "modal-botoes" }, cancelar, ok)));
     document.addEventListener("keydown", tecla);
     document.body.append(fundo);
-    cancelar.focus();
+    (cancelar || ok).focus();
   });
 }
+function janela(titulo, ...conteudo) {
+  const fechar = () => { document.removeEventListener("keydown", tecla); fundo.remove(); fundo.dispatchEvent(new Event("fechou")); };
+  const tecla = (e) => { if (e.key === "Escape" && document.querySelectorAll(".modal-fundo").length === 1) fechar(); };
+  const corpo = el("div", { class: "janela-corpo" }, ...conteudo);
+  const fundo = el("div", { class: "modal-fundo", onclick: (e) => { if (e.target === fundo) fechar(); } },
+    el("div", { class: "modal largo", role: "dialog", "aria-modal": "true" },
+      el("div", { class: "janela-topo" }, el("h2", {}, titulo), el("button", { class: "fechar", type: "button", "aria-label": "Fechar", onclick: fechar }, "×")),
+      corpo));
+  document.addEventListener("keydown", tecla);
+  document.body.append(fundo);
+  return { fundo, corpo, fechar };
+}
+async function erroModal(msg) { await confirmar({ titulo: "Não foi possível concluir", texto: msg, botaoOk: "Ok", soOk: true }); }
 
+/* ===== Presença manual ===== */
+async function abrirPresencas(aula, aoMudar) {
+  const nomeAula = aula.disciplina + (aula.titulo ? " · " + aula.titulo : "");
+  const busca = el("input", { type: "search", placeholder: "Buscar aluno pelo nome ou CPF" });
+  const lista = el("ul", { class: "lista" });
+  const contador = el("p", { class: "small muted" });
+  const j = janela("Presenças da aula",
+    el("div", { class: "modal-detalhe" }, nomeAula + (aula.data ? " — " + fmtData(aula.data) : "")),
+    busca, contador, lista);
+  let alunos = [], pres = new Map();
+  async function carregar() {
+    const [{ data: a }, { data: p }] = await Promise.all([
+      sb.from("freq_perfis").select("id,nome,cpf").eq("papel", "aluno").order("nome"),
+      sb.from("freq_presencas").select("aluno_id,manual,registrada_em").eq("aula_id", aula.id)
+    ]);
+    alunos = a || []; pres = new Map((p || []).map(x => [x.aluno_id, x]));
+    desenhar();
+  }
+  function desenhar() {
+    const q = busca.value.trim().toLowerCase(); const qd = soDigitos(q);
+    const filtrados = alunos.filter(a => !q || (a.nome || "").toLowerCase().includes(q) || (qd && (a.cpf || "").includes(qd)));
+    contador.textContent = `${pres.size} presente(s) de ${alunos.length} aluno(s) cadastrados`;
+    lista.replaceChildren(...(filtrados.length ? filtrados.map(a => {
+      const p = pres.get(a.id);
+      return el("li", {},
+        el("div", {}, el("div", {}, a.nome || "(sem nome)"),
+          el("div", { class: "small muted" }, p ? `Presente · ${p.manual ? "registro manual" : "QR code"} · ${fmtHora(p.registrada_em)}` : (a.cpf ? "CPF " + fmtCpf(a.cpf) : ""))),
+        p ? el("button", { class: "btn perigo mini", type: "button", onclick: async (e) => {
+              const sim = await confirmar({ titulo: "Remover esta presença?", texto: `${a.nome} passará a constar como falta nesta aula.`, detalhe: nomeAula, botaoOk: "Sim, remover", perigo: true });
+              if (!sim) return;
+              e.currentTarget.disabled = true;
+              const { error } = await sb.rpc("freq_desmarcar_presenca", { p_aula: aula.id, p_aluno: a.id });
+              if (error) { await erroModal(error.message); }
+              await carregar(); aoMudar && aoMudar();
+            } }, "Remover")
+          : el("button", { class: "btn mini", type: "button", onclick: async (e) => {
+              e.currentTarget.disabled = true;
+              const { error } = await sb.rpc("freq_marcar_presenca", { p_aula: aula.id, p_aluno: a.id });
+              if (error) { await erroModal(error.message); }
+              await carregar(); aoMudar && aoMudar();
+            } }, "Marcar presença"));
+    }) : [el("li", {}, el("span", { class: "muted" }, alunos.length ? "Nenhum aluno encontrado." : "Nenhum aluno cadastrado ainda."))]));
+  }
+  busca.addEventListener("input", desenhar);
+  lista.append(el("li", {}, el("span", { class: "muted" }, "Carregando…")));
+  await carregar();
+  busca.focus();
+}
+
+/* ===== Apagar aula ===== */
 async function apagarAula(a) {
   const nome = a.disciplina + (a.titulo ? " · " + a.titulo : "");
   const { count } = await sb.from("freq_presencas").select("id", { count: "exact", head: true }).eq("aula_id", a.id);
@@ -444,45 +655,58 @@ async function apagarAula(a) {
   });
   if (!sim) return;
   const { error } = await sb.rpc("freq_apagar_aula", { p_aula: a.id });
-  if (error) { await confirmar({ titulo: "Não foi possível apagar", texto: error.message, botaoOk: "Ok" }); return; }
+  if (error) { await erroModal(error.message); return; }
   telaProfessor("aulas");
 }
 
+/* ===== Relatório ===== */
 async function abaRelatorio() {
-  const { data: aulas } = await sb.from("freq_aulas").select("id,disciplina,titulo,data").order("data").order("iniciada_em");
-  const disciplinas = [...new Set((aulas || []).map(a => a.disciplina))];
-  if (!disciplinas.length) return [el("div", { class: "card" }, el("p", { class: "muted" }, "Ainda não há aulas para gerar relatório."))];
-  const sel = el("select", {}, disciplinas.map(d => el("option", { value: d }, d)));
+  const [{ data: aulas }, discs] = await Promise.all([
+    sb.from("freq_aulas").select("id,disciplina,disciplina_id,titulo,data").order("data").order("iniciada_em"),
+    carregarDisciplinas()
+  ]);
+  const mapa = mapaDisciplinas(discs);
+  const chaves = [...new Set((aulas || []).map(chaveAula))];
+  if (!chaves.length) return [el("div", { class: "card" }, el("h1", {}, "Relatório de frequência"), el("p", { class: "muted" }, "Ainda não há aulas para gerar relatório."))];
+  // Mais recentes primeiro
+  chaves.sort((x, y) => {
+    const ux = aulas.filter(a => chaveAula(a) === x).at(-1).data, uy = aulas.filter(a => chaveAula(a) === y).at(-1).data;
+    return uy.localeCompare(ux);
+  });
+  const sel = el("select", {}, chaves.map(k => el("option", { value: k }, nomeDaChave(k, mapa, aulas))));
   const area = el("div");
   async function montar() {
-    const daDisc = aulas.filter(a => a.disciplina === sel.value);
+    const daDisc = aulas.filter(a => chaveAula(a) === sel.value);
     const ids = daDisc.map(a => a.id);
     const [{ data: pres }, { data: alunos }] = await Promise.all([
-      sb.from("freq_presencas").select("aula_id,aluno_id").in("aula_id", ids),
+      sb.from("freq_presencas").select("aula_id,aluno_id,manual").in("aula_id", ids),
       sb.from("freq_perfis").select("id,nome").eq("papel", "aluno").order("nome")
     ]);
-    const set = new Set((pres || []).map(p => p.aula_id + "|" + p.aluno_id));
+    const marcasMap = new Map((pres || []).map(p => [p.aula_id + "|" + p.aluno_id, p]));
     const comPresenca = new Set((pres || []).map(p => p.aluno_id));
     const lista = (alunos || []).filter(a => comPresenca.has(a.id));
     if (!lista.length) { area.replaceChildren(el("p", { class: "muted" }, "Nenhuma presença registrada nesta disciplina.")); return; }
     const linhas = lista.map(al => {
-      const marcas = daDisc.map(a => set.has(a.id + "|" + al.id));
+      const marcas = daDisc.map(a => marcasMap.get(a.id + "|" + al.id) || null);
       const n = marcas.filter(Boolean).length;
       return { nome: al.nome || "(sem nome)", marcas, n, pct: Math.round(100 * n / daDisc.length) };
     });
+    const abaixo = linhas.filter(l => l.pct < FREQ_MINIMA).length;
     const tabela = el("table", {},
       el("thead", {}, el("tr", {}, el("th", {}, "Aluno"), daDisc.map((a, i) => el("th", { title: a.titulo || "" }, `A${i + 1}`, el("br"), fmtData(a.data).slice(0, 5))), el("th", {}, "Freq."))),
       el("tbody", {}, linhas.map(l => el("tr", {}, el("td", {}, l.nome),
-        l.marcas.map(m => el("td", { class: m ? "p" : "f" }, m ? "P" : "F")), el("td", {}, el("b", {}, l.pct + "%"))))));
+        l.marcas.map(m => el("td", { class: m ? "p" : "f", title: m?.manual ? "Presença manual" : "" }, m ? (m.manual ? "P*" : "P") : "F")),
+        el("td", { class: l.pct < FREQ_MINIMA ? "pct-baixo" : "pct-bom" }, el("b", {}, l.pct + "%"))))));
     const csv = () => {
-      const cab = ["Aluno", ...daDisc.map((a, i) => `A${i + 1} ${fmtData(a.data)}`), "Presenças", "Frequência"];
-      const corpo = linhas.map(l => [l.nome, ...l.marcas.map(m => m ? "P" : "F"), l.n, l.pct + "%"]);
+      const cab = ["Aluno", ...daDisc.map((a, i) => `A${i + 1} ${fmtData(a.data)}`), "Presenças", "Frequência", "Situação"];
+      const corpo = linhas.map(l => [l.nome, ...l.marcas.map(m => m ? "P" : "F"), l.n, l.pct + "%", l.pct >= FREQ_MINIMA ? "Acima do mínimo" : "Abaixo do mínimo"]);
       const txt = [cab, ...corpo].map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(";")).join("\r\n");
-      const a = el("a", { href: URL.createObjectURL(new Blob(["﻿" + txt], { type: "text/csv;charset=utf-8" })), download: `frequencia-${sel.value}.csv` });
+      const a = el("a", { href: URL.createObjectURL(new Blob(["﻿" + txt], { type: "text/csv;charset=utf-8" })), download: `frequencia-${nomeDaChave(sel.value, mapa, aulas).replace(/[^\w\-À-ú ]+/g, "")}.csv` });
       document.body.append(a); a.click(); a.remove();
     };
     area.replaceChildren(
-      el("p", { class: "small muted" }, `${daDisc.length} aula(s) · ${lista.length} aluno(s) · P = presente, F = falta`),
+      el("p", { class: "small muted" }, `${daDisc.length} aula(s) · ${lista.length} aluno(s) · P = presente, P* = presença manual, F = falta`),
+      abaixo ? aviso("warn", `${abaixo} aluno(s) abaixo da frequência mínima de ${FREQ_MINIMA}%.`) : null,
       el("div", { class: "tabela-wrap" }, tabela),
       el("button", { class: "btn sec", type: "button", style: "margin-top:16px", onclick: csv }, "Baixar planilha (CSV)"));
   }
@@ -491,35 +715,184 @@ async function abaRelatorio() {
   return [el("div", { class: "card" }, el("h1", {}, "Relatório de frequência"), el("label", {}, "Disciplina"), sel, el("div", { style: "margin-top:16px" }, area))];
 }
 
-async function abaAlunos() {
-  const { data: alunos } = await sb.from("freq_perfis").select("id,nome,papel,aparelho_id,cpf").order("nome");
-  const lista = (alunos || []).filter(a => a.papel === "aluno");
+/* ===== Pessoas (alunos; para a coordenação, todos) ===== */
+let filtroPessoas = "aluno";
+async function abaPessoas() {
+  const { data: todos } = await sb.from("freq_perfis").select("id,nome,papel,aparelho_id,cpf").order("nome");
+  const coord = ehCoord();
+  if (!coord) filtroPessoas = "aluno";
+  const lista = (todos || []).filter(p => filtroPessoas === "todos" || p.papel === filtroPessoas);
   const caixa = el("div");
-  return [el("div", { class: "card" }, el("h1", {}, "Alunos"),
-    el("p", { class: "muted small" }, "“Liberar celular”: quando o aluno trocar de aparelho ou limpar os dados do navegador. “Nova senha”: quando o aluno esquecer a senha."),
-    caixa,
-    lista.length ? el("ul", { class: "lista" }, lista.map(a => el("li", {},
-      el("div", {}, el("div", {}, a.nome || "(sem nome)"),
-        el("div", { class: "small muted" }, [a.cpf ? "CPF " + fmtCpf(a.cpf) : "Conta antiga (e-mail)", a.aparelho_id ? "celular vinculado" : "sem celular vinculado"].join(" · "))),
+  const contagem = (pp) => (todos || []).filter(p => pp === "todos" || p.papel === pp).length;
+  const filtros = coord ? el("div", { class: "filtros" },
+    [["aluno", "Alunos"], ["professor", "Professores"], ["coordenacao", "Coordenação"], ["todos", "Todos"]].map(([k, t]) =>
+      el("button", { type: "button", class: "chip" + (filtroPessoas === k ? " on" : ""), onclick: () => { filtroPessoas = k; telaProfessor("pessoas"); } }, `${t} (${contagem(k)})`))) : null;
+
+  const linha = (p) => {
+    const eu = p.id === perfil.id;
+    const podeSenha = !eu && (p.papel === "aluno" || (coord && p.papel === "professor"));
+    const papelSel = coord && !eu ? el("select", { class: "mini-select", "aria-label": "Perfil", onchange: async (e) => {
+      const novo = e.target.value;
+      const sim = await confirmar({ titulo: "Mudar o perfil?", texto: `${p.nome || "Esta pessoa"} passará a ser ${NOMES_PAPEL[novo]}.`, botaoOk: "Sim, mudar" });
+      if (!sim) { e.target.value = p.papel; return; }
+      const { error } = await sb.rpc("freq_definir_papel", { p_usuario: p.id, p_papel: novo });
+      if (error) { await erroModal(error.message); e.target.value = p.papel; return; }
+      telaProfessor("pessoas");
+    } }, Object.entries(NOMES_PAPEL).map(([k, t]) => el("option", { value: k, selected: p.papel === k }, t))) : null;
+    return el("li", {},
+      el("div", {}, el("div", {}, (p.nome || "(sem nome)") + (eu ? " (você)" : "")),
+        el("div", { class: "small muted" }, [p.cpf ? "CPF " + fmtCpf(p.cpf) : null, coord && filtroPessoas === "todos" ? NOMES_PAPEL[p.papel] : null,
+          p.papel === "aluno" ? (p.aparelho_id ? "celular vinculado" : "sem celular vinculado") : null].filter(Boolean).join(" · "))),
       el("div", { class: "acoes-aluno" },
-        el("button", { class: "btn sec mini", type: "button", onclick: async (e) => {
-          const nova = prompt(`Nova senha para ${a.nome || "este aluno"} (mínimo de 6 caracteres):`);
+        papelSel,
+        podeSenha ? el("button", { class: "btn sec mini", type: "button", onclick: async (e) => {
+          const nova = prompt(`Nova senha para ${p.nome || "esta pessoa"} (mínimo de 6 caracteres):`);
           if (nova == null) return;
-          if (nova.length < 6) { alert("A senha precisa ter pelo menos 6 caracteres."); return; }
-          e.currentTarget.disabled = true;
-          const { data, error } = await sb.functions.invoke("freq-contas", { body: { acao: "redefinir_senha", aluno: a.id, senha: nova } });
-          e.currentTarget.disabled = false;
+          if (nova.length < 6) { await erroModal("A senha precisa ter pelo menos 6 caracteres."); return; }
+          const b = e.currentTarget; b.disabled = true;
+          const { data, error } = await sb.functions.invoke("freq-contas", { body: { acao: "redefinir_senha", aluno: p.id, senha: nova } });
+          b.disabled = false;
           if (error || !data?.ok) { caixa.replaceChildren(aviso("err", data?.mensagem || "Não foi possível alterar a senha. Tente de novo.")); return; }
-          caixa.replaceChildren(aviso("ok", `Senha de ${a.nome || "aluno"} alterada. Informe a nova senha a ele(a).`));
-        } }, "Nova senha"),
-        a.aparelho_id ? el("button", { class: "btn perigo mini", type: "button", onclick: async (e) => {
-          if (!confirm(`Liberar o celular de ${a.nome || "este aluno"}? Na próxima presença ele vincula o aparelho que estiver usando.`)) return;
+          caixa.replaceChildren(aviso("ok", `Senha de ${p.nome || "usuário"} alterada. Informe a nova senha a ele(a).`));
+        } }, "Nova senha") : null,
+        p.papel === "aluno" && p.aparelho_id ? el("button", { class: "btn perigo mini", type: "button", onclick: async (e) => {
+          const sim = await confirmar({ titulo: "Liberar o celular?", texto: `Na próxima presença, ${p.nome || "o aluno"} vincula o aparelho que estiver usando.`, botaoOk: "Sim, liberar" });
+          if (!sim) return;
           e.currentTarget.disabled = true;
-          const { error } = await sb.rpc("freq_liberar_aparelho", { p_aluno: a.id });
-          if (error) { alert(error.message); e.currentTarget.disabled = false; return; }
-          telaProfessor("alunos");
-        } }, "Liberar celular") : null))))
-    : el("p", { class: "muted" }, "Nenhum aluno cadastrado ainda."))];
+          const { error } = await sb.rpc("freq_liberar_aparelho", { p_aluno: p.id });
+          if (error) { await erroModal(error.message); return; }
+          telaProfessor("pessoas");
+        } }, "Liberar celular") : null));
+  };
+
+  return [el("div", { class: "card" }, el("h1", {}, coord ? "Pessoas" : "Alunos"),
+    el("p", { class: "muted small" }, coord
+      ? "Todos se cadastram como aluno. Para tornar alguém professor ou coordenação, mude o perfil aqui. “Nova senha” serve para quem esqueceu a senha; “Liberar celular”, para o aluno que trocou de aparelho."
+      : "“Nova senha”: quando o aluno esquecer a senha. “Liberar celular”: quando o aluno trocar de aparelho ou limpar os dados do navegador."),
+    filtros, caixa,
+    lista.length ? el("ul", { class: "lista" }, lista.map(linha)) : el("p", { class: "muted" }, "Ninguém nesta lista ainda."))];
+}
+
+/* ===== Disciplinas: Farol de Módulos (coordenação) ===== */
+async function abaDisciplinas() {
+  const [discs, { data: aulas }] = await Promise.all([carregarDisciplinas(), sb.from("freq_aulas").select("disciplina_id")]);
+  const aulasPor = new Map();
+  for (const a of aulas || []) if (a.disciplina_id) aulasPor.set(a.disciplina_id, (aulasPor.get(a.disciplina_id) || 0) + 1);
+  const novo = el("button", { class: "btn", type: "button", onclick: () => editarDisciplina(null, discs) }, "+ Nova disciplina");
+  if (!discs.length) return [el("div", { class: "card" }, el("h1", {}, "Disciplinas"), el("p", { class: "muted" }, "Nenhuma disciplina cadastrada."), novo)];
+
+  const cicloAtual = Math.max(...discs.map(d => d.ciclo || 0));
+  const doCiclo = discs.filter(d => d.ciclo === cicloAtual);
+  const feitas = doCiclo.filter(d => d.status === "concluida").length;
+  const agora = discs.filter(d => d.status === "andamento");
+  const proxima = discs.find(d => d.status === "prevista");
+  const proxGrupo = proxima ? discs.filter(d => d.ano === proxima.ano && d.bimestre === proxima.bimestre && d.status === "prevista") : [];
+  const destaque = agora.length ? agora : proxGrupo;
+  const pct = doCiclo.length ? Math.round(100 * feitas / doCiclo.length) : 0;
+
+  // Agrupa por ano e bimestre
+  const anos = [...new Set(discs.map(d => d.ano))].sort();
+  const anosDoCiclo = (c) => [...new Set(discs.filter(d => d.ciclo === c).map(d => d.ano))].sort();
+  const subAno = (ano) => {
+    const cs = [...new Set(discs.filter(d => d.ano === ano).map(d => d.ciclo).filter(Boolean))];
+    if (cs.length !== 1) return "";
+    const lista = anosDoCiclo(cs[0]);
+    return lista.length > 1 ? `Ciclo ${cs[0]}, ${lista.indexOf(ano) + 1}º ano` : `Ciclo ${cs[0]}`;
+  };
+  let marcouProximo = false;
+  const blocoAno = (ano) => {
+    const doAno = discs.filter(d => d.ano === ano);
+    const bims = [...new Set(doAno.map(d => d.bimestre))].sort((a, b) => a - b);
+    return el("section", { class: "farol-ano" },
+      el("div", { class: "farol-ano-tit" }, el("h2", {}, String(ano)), el("span", {}, subAno(ano))),
+      el("div", { class: "farol-trilha" }, bims.map(b => {
+        const ds = doAno.filter(d => d.bimestre === b);
+        let cls = "todo", tag = null;
+        if (ds.every(d => d.status === "concluida")) { cls = "ok"; tag = el("span", { class: "tag" }, "✓"); }
+        else if (ds.some(d => d.status === "andamento")) { cls = "agora"; tag = el("span", { class: "tag" }, "em andamento"); }
+        else if (!agora.length && !marcouProximo && ds.some(d => d.status === "prevista")) { cls = "proximo"; tag = el("span", { class: "tag" }, "próximo"); marcouProximo = true; }
+        const per = ds.find(d => d.periodo)?.periodo;
+        return el("div", { class: "farol-bim " + cls },
+          el("div", { class: "farol-bim-topo" }, el("span", { class: "per" }, per || "a definir"), tag),
+          el("ul", {}, ds.map(d => el("li", {},
+            el("button", { type: "button", class: "farol-disc", onclick: () => editarDisciplina(d, discs) },
+              el("span", {}, d.nome),
+              el("small", {}, [d.professor || "professor a definir", aulasPor.get(d.id) ? `${aulasPor.get(d.id)} aula(s)` : null].filter(Boolean).join(" · ")))))));
+      })));
+  };
+
+  const seq = doCiclo.filter(d => d.seq_original).sort((a, b) => a.seq_original - b.seq_original);
+  const sequencia = seq.length ? el("details", { class: "farol-seq" },
+    el("summary", {}, `Sequência original do Ciclo ${cicloAtual}`),
+    el("ol", {}, seq.map(d => el("li", { class: d.status === "concluida" ? "ok" : "" },
+      el("span", { class: "num" }, d.seq_original + "ª"),
+      el("span", {}, d.nome, d.status === "concluida" ? el("small", {}, `✓ concluída em ${quando(d)}`) : d.status === "andamento" ? el("small", { class: "agora" }, `em andamento (${quando(d)})`) : null))))) : null;
+
+  return [el("div", { class: "card farol" },
+    el("div", { class: "farol-cab" }, el("div", {}, el("h1", {}, "Farol de Módulos"), el("p", { class: "muted small" }, "Toque numa disciplina para editar professor, período ou situação.")), novo),
+    el("div", { class: "resumo" },
+      el("div", { class: "resumo-box" }, el("span", {}, `Concluídas no Ciclo ${cicloAtual}`), el("b", {}, `${feitas} de ${doCiclo.length}`), el("small", {}, `${pct}% do ciclo`)),
+      el("div", { class: "resumo-box" }, el("span", {}, "Faltam"), el("b", {}, doCiclo.length - feitas), el("small", {}, "disciplinas no ciclo")),
+      el("div", { class: "resumo-box destaque" }, el("span", {}, agora.length ? "Em andamento" : "Próximo bimestre"),
+        el("b", { class: "menor" }, destaque.map(d => d.nome).join(" e ") || "—"),
+        el("small", {}, destaque.map(d => d.professor || "professor a definir").join(" e ")))),
+    el("div", { class: "farol-barra", role: "img", "aria-label": `${feitas} de ${doCiclo.length} disciplinas concluídas` },
+      doCiclo.map(d => el("i", { class: d.status === "concluida" ? "ok" : d.status === "andamento" ? "agora" : "" }))),
+    el("div", { class: "legenda" },
+      el("span", {}, el("i", { class: "sw ok" }), "Concluída"), el("span", {}, el("i", { class: "sw agora" }), "Em andamento / próximo"), el("span", {}, el("i", { class: "sw todo" }), "Falta")),
+    anos.map(blocoAno),
+    sequencia)];
+}
+
+function editarDisciplina(d, discs) {
+  const novo = !d;
+  d = d || { nome: "", professor: "", ano: new Date().getFullYear(), bimestre: 1, periodo: "", ciclo: Math.max(0, ...discs.map(x => x.ciclo || 0)) || "", seq_original: "", status: "prevista" };
+  const nome = el("input", { type: "text", required: true, value: d.nome });
+  const professor = el("input", { type: "text", placeholder: "Ex.: Lúcio Carlos", value: d.professor || "" });
+  const ano = el("input", { type: "number", required: true, min: "2000", max: "2100", value: d.ano });
+  const bimestre = el("input", { type: "number", required: true, min: "1", max: "12", value: d.bimestre });
+  const periodo = el("input", { type: "text", placeholder: "Ex.: out/nov (vazio = a definir)", value: d.periodo || "" });
+  const ciclo = el("input", { type: "number", min: "1", value: d.ciclo ?? "" });
+  const seqOrig = el("input", { type: "number", min: "1", placeholder: "Opcional", value: d.seq_original ?? "" });
+  const status = el("select", {}, Object.entries(ROTULO_STATUS).map(([k, t]) => el("option", { value: k, selected: d.status === k }, t)));
+  const caixa = el("div");
+  const salvar = el("button", { class: "btn", type: "submit" }, "Salvar");
+  const j = janela(novo ? "Nova disciplina" : "Editar disciplina",
+    el("form", { onsubmit: async (e) => {
+      e.preventDefault();
+      if (!nome.value.trim()) { caixa.replaceChildren(aviso("err", "Digite o nome da disciplina.")); return; }
+      salvar.disabled = true;
+      const { error } = await sb.rpc("freq_salvar_disciplina", { p: {
+        id: novo ? "" : d.id, nome: nome.value.trim(), professor: professor.value.trim(), ano: Number(ano.value), bimestre: Number(bimestre.value),
+        periodo: periodo.value.trim(), ciclo: ciclo.value, seq_original: seqOrig.value, status: status.value } });
+      if (error) { caixa.replaceChildren(aviso("err", error.message)); salvar.disabled = false; return; }
+      j.fechar(); telaProfessor("disciplinas");
+    } },
+      el("label", {}, "Nome da disciplina"), nome,
+      el("label", {}, "Professor"), professor,
+      el("div", { class: "duas-col" },
+        el("div", {}, el("label", {}, "Ano"), ano),
+        el("div", {}, el("label", {}, "Bimestre (ordem no ano)"), bimestre)),
+      el("label", {}, "Período"), periodo,
+      el("label", {}, "Situação"), status,
+      el("div", { class: "duas-col" },
+        el("div", {}, el("label", {}, "Ciclo"), ciclo),
+        el("div", {}, el("label", {}, "Nº na sequência original"), seqOrig)),
+      caixa,
+      el("div", { class: "modal-botoes", style: "margin-top:16px" },
+        novo ? null : el("button", { class: "btn perigo", type: "button", onclick: async () => {
+          const { count } = await sb.from("freq_aulas").select("id", { count: "exact", head: true }).eq("disciplina_id", d.id);
+          const sim = await confirmar({ titulo: "Tem certeza que deseja apagar esta disciplina?",
+            texto: count ? `Ela tem ${count} aula(s) registrada(s). As aulas e as presenças continuam salvas, mas deixam de aparecer ligadas a esta disciplina no Farol.` : "Ela não tem aulas registradas. Isso não pode ser desfeito.",
+            detalhe: rotuloDisc(d), botaoOk: "Sim, apagar", perigo: true });
+          if (!sim) return;
+          const { error } = await sb.rpc("freq_apagar_disciplina", { p_id: d.id });
+          if (error) { await erroModal(error.message); return; }
+          j.fechar(); telaProfessor("disciplinas");
+        } }, "Apagar"),
+        el("button", { class: "btn sec", type: "button", onclick: () => j.fechar() }, "Cancelar"),
+        salvar)));
+  nome.focus();
 }
 
 /* ===== Pix do seminário ===== */
@@ -655,9 +1028,11 @@ function telaAoVivo(aula) {
         el("h1", {}, aula.disciplina + (aula.titulo ? " · " + aula.titulo : ""))),
       el("div", { style: "display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end" },
         el("button", { class: "btn sec", type: "button", onclick: () => { try { const p = document.fullscreenElement ? document.exitFullscreen() : raiz.requestFullscreen?.(); p?.catch?.(() => {}); } catch {} } }, "Tela cheia"),
+        el("button", { class: "btn sec", type: "button", onclick: () => abrirPresencas(aula) }, "Presença manual"),
         el("button", { class: "btn sec", type: "button", onclick: sairTela }, "Voltar"),
         el("button", { class: "btn", style: "background:#fff;color:var(--err)", type: "button", onclick: async () => {
-          if (!confirm("Encerrar a aula? Depois disso ninguém mais consegue confirmar presença.")) return;
+          const sim = await confirmar({ titulo: "Encerrar a aula?", texto: "Depois disso ninguém mais consegue confirmar presença pelo QR code. A presença manual continua disponível em Aulas recentes.", botaoOk: "Sim, encerrar", perigo: true });
+          if (!sim) return;
           await sb.rpc("freq_encerrar_aula", { p_aula: aula.id }); sairTela();
         } }, "Encerrar aula"))),
     el("div", { class: "corpo" },
@@ -682,10 +1057,10 @@ function telaAoVivo(aula) {
       if (data.token !== tokenAtual) { tokenAtual = data.token; desenharQR(tokenAtual); }
       expira = new Date(data.expira_em).getTime();
     }
-    const { data: pres } = await sb.from("freq_presencas").select("aluno_id,registrada_em,freq_perfis(nome)").eq("aula_id", aula.id).order("registrada_em", { ascending: false });
+    const { data: pres } = await sb.from("freq_presencas").select("aluno_id,registrada_em,manual,freq_perfis!freq_presencas_aluno_id_fkey(nome)").eq("aula_id", aula.id).order("registrada_em", { ascending: false });
     if (pres) {
       numero.textContent = pres.length;
-      nomes.replaceChildren(...pres.map(p => el("li", {}, (p.freq_perfis?.nome || "Aluno") + " · " + fmtHora(p.registrada_em))));
+      nomes.replaceChildren(...pres.map(p => el("li", {}, (p.freq_perfis?.nome || "Aluno") + " · " + fmtHora(p.registrada_em) + (p.manual ? " · manual" : ""))));
     }
     timer = setTimeout(atualizar, 4000);
   }
