@@ -97,6 +97,15 @@ td.f{color:#c3cad8}
 .ao-vivo-tela .btn.sec{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.3)}
 .ao-vivo-tela .instrucao{opacity:.8;font-size:15px;margin-top:10px;text-align:center;color:#1b1f2a}
 .oculto{display:none!important}
+.farol-disc.estatico{cursor:default}
+.farol-disc.estatico:hover{background:none}
+ol.pendentes{list-style:none;padding:0;margin:8px 0 0;columns:2 280px;column-gap:24px}
+ol.pendentes li{display:grid;grid-template-columns:38px 1fr;gap:6px;align-items:start;padding:6px 0;border-top:1px solid var(--line);break-inside:avoid}
+ol.pendentes .num{font-weight:700;color:var(--muted);padding-top:4px}
+ol.pendentes .farol-disc{margin:0}
+.concluiu{background:var(--ok-bg);color:var(--ok);font-weight:700;padding:14px;border-radius:12px}
+.card.farol h2{font-size:17px;color:var(--brand)}
+.farol-ano .farol-ano-tit h2{font-size:22px}
 /* ===== Abas roláveis ===== */
 .abas{overflow-x:auto;scrollbar-width:none}
 .abas::-webkit-scrollbar{display:none}
@@ -232,7 +241,7 @@ function el(tag, attrs = {}, ...filhos) {
     else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
     else if (v !== false && v != null) n.setAttribute(k, v === true ? "" : v);
   }
-  for (const f of filhos.flat()) if (f != null && f !== false) n.append(f instanceof Node ? f : document.createTextNode(String(f)));
+  for (const f of filhos.flat(Infinity)) if (f != null && f !== false) n.append(f instanceof Node ? f : document.createTextNode(String(f)));
   return n;
 }
 function tela(...filhos) { $app.replaceChildren(...filhos.flat().filter(f => f != null && f !== false)); window.scrollTo(0, 0); }
@@ -429,8 +438,8 @@ let abaAlunoAtual = "frequencia";
 async function telaAluno(aba = abaAlunoAtual) {
   abaAlunoAtual = aba;
   const conteudo = el("div", {}, el("div", { class: "carregando" }, "Carregando…"));
-  tela(barraAbas([["frequencia", "Minha frequência"], ["pix", "Pix do seminário"]], aba, telaAluno), conteudo);
-  conteudo.replaceChildren(...(aba === "pix" ? await abaPixLeitura() : await abaFrequenciaAluno()));
+  tela(barraAbas([["frequencia", "Frequência"], ["disciplinas", "Disciplinas"], ["pix", "Pix"]], aba, telaAluno), conteudo);
+  conteudo.replaceChildren(...(aba === "pix" ? await abaPixLeitura() : aba === "disciplinas" ? await abaDisciplinasAluno() : await abaFrequenciaAluno()));
 }
 
 async function abaFrequenciaAluno() {
@@ -487,6 +496,211 @@ async function abaFrequenciaAluno() {
           }))
         : el("p", { class: "muted" }, "Nada por aqui ainda."))
   ];
+}
+
+/* ===== Farol pessoal do aluno ===== */
+const ordemDisc = (d) => d.ano * 100 + d.bimestre;
+const normNome = (s) => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+function quandoCurto(d) { return d.periodo ? `${d.periodo} ${d.ano}` : `${d.ano} (período a definir)`; }
+
+// Monta o farol de um aluno a partir do Farol geral, do ingresso e dos ajustes da coordenação
+function calcularFarolAluno(discs, ingresso, ajustes) {
+  const ing = ingresso ? ingresso.ano * 100 + ingresso.bimestre : null;
+  const cursadas = new Map(), andamento = new Map();
+  for (const d of discs) {
+    const aj = ajustes.get(d.id);
+    if (aj === false) continue;
+    const nome = normNome(d.nome);
+    if (aj === true) { cursadas.set(nome, { d, ajuste: true }); continue; }
+    if (ing == null || ordemDisc(d) < ing) continue;
+    if (d.status === "concluida") cursadas.set(nome, { d, ajuste: false });
+    else if (d.status === "andamento") andamento.set(nome, d);
+  }
+  for (const n of cursadas.keys()) andamento.delete(n);
+  const cicloAtual = Math.max(0, ...discs.filter(d => d.seq_original).map(d => d.ciclo || 0));
+  const seq = discs.filter(d => d.ciclo === cicloAtual && d.seq_original).sort((a, b) => a.seq_original - b.seq_original);
+  const linhas = seq.map(s => {
+    const n = normNome(s.nome);
+    if (cursadas.has(n)) return { s, estado: "feita", em: cursadas.get(n).d, ajuste: cursadas.get(n).ajuste };
+    if (andamento.has(n)) return { s, estado: "andamento", em: andamento.get(n) };
+    const prox = discs.filter(d => normNome(d.nome) === n && d.status !== "concluida" && ordemDisc(d) >= (ing ?? 0))
+      .sort((a, b) => ordemDisc(a) - ordemDisc(b))[0];
+    const naoCursou = discs.some(d => normNome(d.nome) === n && ajustes.get(d.id) === false);
+    return { s, estado: "pendente", proxima: prox || null, naoCursou };
+  });
+  const nomesSeq = new Set(seq.map(s => normNome(s.nome)));
+  const extras = [...cursadas.values()].filter(c => !nomesSeq.has(normNome(c.d.nome)));
+  return { cicloAtual, linhas, cursadas: [...cursadas.values()], extras, andamento: [...andamento.values()],
+    total: seq.length, feitas: linhas.filter(l => l.estado === "feita").length };
+}
+
+async function dadosFarolAluno(alunoId) {
+  const [discs, { data: aluno }, { data: ajs }, { data: pres }] = await Promise.all([
+    carregarDisciplinas(),
+    sb.from("freq_perfis").select("id,nome,ingresso_ano,ingresso_bimestre").eq("id", alunoId).maybeSingle(),
+    sb.from("freq_historico_ajuste").select("disciplina_id,cursou").eq("aluno_id", alunoId),
+    sb.from("freq_presencas").select("aula_id").eq("aluno_id", alunoId)
+  ]);
+  let ingresso = aluno?.ingresso_ano ? { ano: aluno.ingresso_ano, bimestre: aluno.ingresso_bimestre, origem: "coordenacao" } : null;
+  if (!ingresso && (pres || []).length) {
+    // Sem ingresso registrado: usa a primeira disciplina em que o aluno teve presença
+    const { data: aulas } = await sb.from("freq_aulas").select("disciplina_id").in("id", pres.map(p => p.aula_id));
+    const mapa = mapaDisciplinas(discs);
+    const ds = (aulas || []).map(a => mapa.get(a.disciplina_id)).filter(Boolean).sort((a, b) => ordemDisc(a) - ordemDisc(b));
+    if (ds[0]) ingresso = { ano: ds[0].ano, bimestre: ds[0].bimestre, origem: "presenca" };
+  }
+  const ajustes = new Map((ajs || []).map(a => [a.disciplina_id, a.cursou]));
+  return { discs, aluno, ingresso, ajustes, farol: calcularFarolAluno(discs, ingresso, ajustes) };
+}
+
+function rotuloIngresso(discs, ingresso) {
+  if (!ingresso) return "não definido";
+  const ds = discs.filter(d => d.ano === ingresso.ano && d.bimestre === ingresso.bimestre);
+  const per = ds.find(d => d.periodo)?.periodo;
+  return `${per ? per + " " : ""}${ingresso.ano}` + (ds.length ? ` (${ds.map(d => d.nome).join(" e ")})` : "");
+}
+
+// Desenha o farol; com "editar", cada disciplina abre as opções da coordenação
+function farolAlunoView(dados, editar) {
+  const { discs, ingresso, farol } = dados;
+  if (!ingresso && !farol.cursadas.length) {
+    return [aviso("warn", editar
+      ? "Defina abaixo em qual módulo este aluno entrou. A partir dele, o app marca as disciplinas cursadas."
+      : "A coordenação ainda não registrou em qual módulo você entrou no seminário. Assim que registrar, suas disciplinas aparecem aqui.")];
+  }
+  const pct = farol.total ? Math.round(100 * farol.feitas / farol.total) : 0;
+  const pendentes = farol.linhas.filter(l => l.estado === "pendente");
+  const cursadasOrd = farol.cursadas.slice().sort((a, b) => ordemDisc(a.d) - ordemDisc(b.d));
+  const clic = (fn) => editar ? { type: "button", class: "farol-disc", onclick: fn } : { class: "farol-disc estatico" };
+
+  // Cursadas agrupadas por ano e bimestre, como no Farol
+  const grupos = new Map();
+  for (const c of cursadasOrd) {
+    const k = c.d.ano + "-" + c.d.bimestre;
+    if (!grupos.has(k)) grupos.set(k, { ano: c.d.ano, per: c.d.periodo, itens: [] });
+    grupos.get(k).itens.push(c);
+  }
+  const anos = [...new Set([...grupos.values()].map(g => g.ano))];
+
+  return [
+    el("div", { class: "resumo" },
+      el("div", { class: "resumo-box" }, el("span", {}, `Cursadas do Ciclo ${farol.cicloAtual}`), el("b", {}, `${farol.feitas} de ${farol.total}`), el("small", {}, `${pct}% do curso`)),
+      el("div", { class: "resumo-box" }, el("span", {}, "Pendentes"), el("b", {}, pendentes.length), el("small", {}, "disciplinas a cursar")),
+      el("div", { class: "resumo-box destaque" }, el("span", {}, "Em andamento"),
+        el("b", { class: "menor" }, farol.andamento.map(d => d.nome).join(" e ") || "—"),
+        el("small", {}, farol.andamento.length ? quandoCurto(farol.andamento[0]) : "nenhuma agora"))),
+    el("div", { class: "farol-barra", role: "img", "aria-label": `${farol.feitas} de ${farol.total} disciplinas cursadas` },
+      farol.linhas.map(l => el("i", { class: l.estado === "feita" ? "ok" : l.estado === "andamento" ? "agora" : "" }))),
+    el("p", { class: "small muted", style: "margin:4px 0 0" }, `Ingresso no seminário: ${rotuloIngresso(discs, ingresso)}` +
+      (ingresso?.origem === "presenca" ? " · estimado pela primeira presença" : "")),
+
+    el("h2", { style: "margin-top:22px" }, "Disciplinas cursadas"),
+    cursadasOrd.length ? anos.map(ano => el("section", { class: "farol-ano", style: "margin-top:8px;padding-top:10px" },
+      el("div", { class: "farol-ano-tit" }, el("h2", {}, String(ano))),
+      el("div", { class: "farol-trilha" }, [...grupos.values()].filter(g => g.ano === ano).map(g =>
+        el("div", { class: "farol-bim ok" },
+          el("div", { class: "farol-bim-topo" }, el("span", { class: "per" }, g.per || "a definir"), el("span", { class: "tag" }, "✓")),
+          el("ul", {}, g.itens.map(c => el("li", {},
+            el(editar ? "button" : "div", clic(() => opcoesHistorico(dados, c.d, "cursada", c.ajuste)),
+              el("span", {}, c.d.nome),
+              el("small", {}, [c.d.professor || null, c.ajuste ? "registrada pela coordenação" : null].filter(Boolean).join(" · ") || " "))))))))))
+      : el("p", { class: "muted" }, "Nenhuma disciplina concluída ainda."),
+
+    farol.andamento.length ? [el("h2", { style: "margin-top:22px" }, "Em andamento"),
+      el("div", { class: "farol-trilha" }, el("div", { class: "farol-bim agora" },
+        el("div", { class: "farol-bim-topo" }, el("span", { class: "per" }, farol.andamento[0].periodo || "agora"), el("span", { class: "tag" }, "cursando")),
+        el("ul", {}, farol.andamento.map(d => el("li", {}, el(editar ? "button" : "div", clic(() => opcoesHistorico(dados, d, "andamento")),
+          el("span", {}, d.nome), el("small", {}, d.professor || " "))))))) ] : null,
+
+    el("h2", { style: "margin-top:22px" }, `Pendentes · sequência original do Ciclo ${farol.cicloAtual}`),
+    pendentes.length ? el("ol", { class: "pendentes" }, pendentes.map(l => el("li", {},
+      el("span", { class: "num" }, l.s.seq_original + "ª"),
+      el(editar ? "button" : "div", clic(() => opcoesHistorico(dados, l.s, "pendente")),
+        el("span", {}, l.s.nome),
+        el("small", {}, l.naoCursou ? "marcada pela coordenação como não cursada" :
+          l.proxima ? (l.proxima.status === "andamento" ? `em andamento: ${quandoCurto(l.proxima)}` : `próxima oferta: ${quandoCurto(l.proxima)}`)
+          : "será oferecida no próximo ciclo")))))
+      : el("p", { class: "concluiu" }, "Parabéns! Todas as disciplinas do ciclo foram cursadas."),
+    farol.extras.length ? [el("h2", { style: "margin-top:22px" }, "Outras disciplinas cursadas"),
+      el("ul", { class: "lista" }, farol.extras.map(c => el("li", {}, el("span", {}, c.d.nome), el("span", { class: "small muted" }, quandoCurto(c.d)))))] : null
+  ];
+}
+
+// Opções da coordenação para uma disciplina do farol do aluno
+async function opcoesHistorico(dados, d, estado, ajustado) {
+  const alunoNome = dados.aluno?.nome || "o aluno";
+  let alvo = d, valor, titulo, texto, botao;
+  if (estado === "pendente") {
+    // Aproveitamento/dispensa: marca a oferta mais recente concluída com esse nome (ou a disciplina da sequência)
+    const n = normNome(d.nome);
+    alvo = dados.discs.filter(x => normNome(x.nome) === n && x.status === "concluida").sort((a, b) => ordemDisc(b) - ordemDisc(a))[0] || d;
+    const jaNegada = dados.discs.filter(x => normNome(x.nome) === n && dados.ajustes.get(x.id) === false);
+    if (jaNegada.length) {
+      const sim = await confirmar({ titulo: "Voltar ao automático?", texto: `“${d.nome}” foi marcada como não cursada por ${alunoNome}. Voltar a contar pelo calendário do Farol?`, botaoOk: "Sim, voltar" });
+      if (!sim) return;
+      for (const x of jaNegada) { const { error } = await sb.rpc("freq_ajustar_historico", { p_aluno: dados.aluno.id, p_disciplina: x.id, p_cursou: null }); if (error) return erroModal(error.message); }
+      return reabrirFarolAluno(dados.aluno.id);
+    }
+    valor = true; titulo = "Marcar como cursada?";
+    texto = `Use quando ${alunoNome} cursou “${d.nome}” fora do calendário do app (por exemplo, numa turma anterior ou por aproveitamento). Ela deixa de aparecer como pendente.`;
+    botao = "Sim, marcar como cursada";
+  } else if (ajustado) {
+    valor = null; titulo = "Desfazer o registro manual?";
+    texto = `“${d.nome}” foi registrada à mão pela coordenação. Ao desfazer, ela volta a seguir o calendário do Farol.`;
+    botao = "Sim, desfazer";
+  } else {
+    valor = false; titulo = "Marcar como não cursada?";
+    texto = `Use quando ${alunoNome} não fez “${d.nome}” (por exemplo, trancou o módulo). Ela volta para a lista de pendentes.`;
+    botao = "Sim, marcar como não cursada";
+  }
+  const sim = await confirmar({ titulo, texto, detalhe: `${d.nome} — ${quandoCurto(alvo)}`, botaoOk: botao, perigo: valor === false });
+  if (!sim) return;
+  const { error } = await sb.rpc("freq_ajustar_historico", { p_aluno: dados.aluno.id, p_disciplina: alvo.id, p_cursou: valor });
+  if (error) return erroModal(error.message);
+  reabrirFarolAluno(dados.aluno.id);
+}
+
+let janelaFarolAtual = null;
+async function reabrirFarolAluno(alunoId) { if (janelaFarolAtual) janelaFarolAtual.fechar(); await abrirFarolAluno(alunoId); }
+
+// Janela da coordenação/professor com o farol de um aluno
+async function abrirFarolAluno(alunoId) {
+  const corpo = el("div", {}, el("p", { class: "muted" }, "Carregando…"));
+  const j = janela("Farol do aluno", corpo);
+  janelaFarolAtual = j;
+  const dados = await dadosFarolAluno(alunoId);
+  const coord = ehCoord();
+  const bims = [];
+  for (const d of dados.discs) {
+    const k = d.ano * 100 + d.bimestre;
+    if (!bims.some(b => b.k === k)) bims.push({ k, ano: d.ano, bimestre: d.bimestre });
+  }
+  bims.sort((a, b) => a.k - b.k);
+  const temIng = dados.aluno?.ingresso_ano;
+  const sel = el("select", { "aria-label": "Módulo de ingresso" },
+    el("option", { value: "" }, "Escolha o módulo de ingresso…"),
+    bims.map(b => el("option", { value: b.k, selected: temIng && b.ano === dados.aluno.ingresso_ano && b.bimestre === dados.aluno.ingresso_bimestre },
+      rotuloIngresso(dados.discs, b))));
+  sel.addEventListener("change", async () => {
+    if (!sel.value) return;
+    const b = bims.find(x => String(x.k) === sel.value);
+    const { error } = await sb.rpc("freq_definir_ingresso", { p_aluno: alunoId, p_ano: b.ano, p_bimestre: b.bimestre });
+    if (error) return erroModal(error.message);
+    reabrirFarolAluno(alunoId);
+  });
+  corpo.replaceChildren(el("div", {},
+    el("div", { class: "modal-detalhe" }, dados.aluno?.nome || "Aluno"),
+    coord ? el("div", {}, el("label", {}, "Módulo em que entrou no seminário"), sel,
+      el("p", { class: "small muted", style: "margin-top:6px" }, "Toque numa disciplina para corrigir casos especiais: aproveitamento, módulo trancado etc.")) : null,
+    farolAlunoView(dados, coord)));
+}
+
+async function abaDisciplinasAluno() {
+  const dados = await dadosFarolAluno(perfil.id);
+  return [el("div", { class: "card farol" },
+    el("h1", {}, "Meu Farol de Disciplinas"),
+    el("p", { class: "muted small" }, "As disciplinas que você já cursou e as que faltam, na sequência do ciclo. Atualiza sozinho a cada módulo concluído."),
+    ...farolAlunoView(dados, false))];
 }
 
 /* ===== Área do professor e da coordenação ===== */
@@ -721,7 +935,7 @@ async function abaRelatorio() {
 /* ===== Pessoas (alunos; para a coordenação, todos) ===== */
 let filtroPessoas = "aluno";
 async function abaPessoas() {
-  const { data: todos } = await sb.from("freq_perfis").select("id,nome,papel,aparelho_id,cpf").order("nome");
+  const { data: todos } = await sb.from("freq_perfis").select("id,nome,papel,aparelho_id,cpf,ingresso_ano").order("nome");
   const coord = ehCoord();
   if (!coord) filtroPessoas = "aluno";
   const lista = (todos || []).filter(p => filtroPessoas === "todos" || p.papel === filtroPessoas);
@@ -745,9 +959,11 @@ async function abaPessoas() {
     return el("li", {},
       el("div", {}, el("div", {}, (p.nome || "(sem nome)") + (eu ? " (você)" : "")),
         el("div", { class: "small muted" }, [p.cpf ? "CPF " + fmtCpf(p.cpf) : null, coord && filtroPessoas === "todos" ? NOMES_PAPEL[p.papel] : null,
-          p.papel === "aluno" ? (p.aparelho_id ? "celular vinculado" : "sem celular vinculado") : null].filter(Boolean).join(" · "))),
+          p.papel === "aluno" ? (p.aparelho_id ? "celular vinculado" : "sem celular vinculado") : null,
+          p.papel === "aluno" && !p.ingresso_ano ? "ingresso não definido" : null].filter(Boolean).join(" · "))),
       el("div", { class: "acoes-aluno" },
         papelSel,
+        p.papel === "aluno" ? el("button", { class: "btn sec mini", type: "button", onclick: () => abrirFarolAluno(p.id) }, "Farol") : null,
         podeSenha ? el("button", { class: "btn sec mini", type: "button", onclick: async (e) => {
           const nova = prompt(`Nova senha para ${p.nome || "esta pessoa"} (mínimo de 6 caracteres):`);
           if (nova == null) return;
